@@ -19,6 +19,6 @@
 				if(mkdir("../src/uploads/".$resultSelect[0]['uid']))
 					return true;
 			}
-
 		}
 	}
+?>
