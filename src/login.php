@@ -7,7 +7,7 @@
 
 		if($dbconn === "Connection Failed")
 			$passErr = "Connection Failed";
-		else if($result = pg_select($dbconn,'user',$checkfields))
+		else if($result = pg_select($dbconn,'users',$checkfields))
 		{
 			return $result;
 		}
