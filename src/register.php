@@ -12,7 +12,7 @@
 			$checkfields = array('email'=>$fields['email']);
 			if($resultSelect = pg_select($dbconn,'users',$checkfields))
 				return false;
-			else if(pg_insert($dbconn,'user',$fields))
+			else if(pg_insert($dbconn,'users',$fields))
 			{
 				$resultSelect = pg_select($dbconn,'users',$checkfields);
 				// if($fields['role'] == 'st'){
@@ -36,8 +36,8 @@
 				// 		$resultUpdation = pg_query($dbconn,$query);
 				// 	}
 				// }
-				print_r($resultSelect);
-				if(mkdir("../src/uploads/".$resultSelect[0]['uid']))
+				// print_r($resultSelect);
+				if(mkdir("./src/uploads/".$resultSelect[0]['uid']))
 					return true;
 			}
 		}

@@ -191,7 +191,7 @@
 			//$content is the path or the name of the file and it is in string
 			//$sendTo is the username of the person to be send-admin or teacher name
 			//$type is img/vid/ppt/pdf
-			//send_from is uid of the users which will be taken from $this->field
+			//send_from is uid of the user which will be taken from $this->field
 			//$approve is true if the send_From is the student or admin and it is false if the send_from is the techer
 			//$senderRole is te or st
 			if($senderRole == 'te')
@@ -200,14 +200,18 @@
 			}
 			if($senderRole == 'st')
 			{
-				$query1 = "select uid from users where username = '".$sendTo."';";
+				$query1 = "select uid from users where username = ".$sendTo.";";
 				if($sendTo = pg_query($this->dbconn,$query1))
 				{
-					$sendTo = $sendTo[0]['uid'];
+					$sendTo = $sendTo[0];
 				}
 			}
-			$query = "insert into studymaterial (content,send_to,send_from,type,approve,batch,year,assignment) values('".$content."',".$sendTo.",".$this->field['uid'].",'".$type."',".$approve.",'".$batch."',".$year.",".$assignment.");";
-			if($result = pg_query($this->dbconn,$query))
+
+
+
+			$query = "insert into studyMaterial (content,send_to,send_from,type,approve,batch,year,assignment) values(".$content.",".$sendTo.",45,".$type.",".$approve.",".$batch.",".$year.",".$assignment.");";
+      // print_r($query);
+      if($result = pg_query(getConnection(),$query))
 			{
 				return true;
 			}

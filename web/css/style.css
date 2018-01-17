@@ -1,0 +1,99 @@
+html,body{
+    margin: 0;
+    height: 100%;
+    background-color: #D6DED8;
+}
+
+#home{
+    width: 600px;
+    background-color: 	#FF6347;
+    margin-right: 0;
+}
+
+#homelogo{
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+    font-size:40px;
+    display: inline-block;
+}
+
+#logo-heading{
+    font-size: 40px;
+    text-align: center;
+}
+
+#message{
+    padding: 42px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.mycard{
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px;
+    background-color:#5BECB7;
+    border-radius: 2px;
+}
+
+.logo{
+    width: 60px;
+    height: 60px;
+    padding-left: 10px;
+}
+
+.form-heading{
+    text-align: center;
+    font-size:xx-large;
+    color: white;
+}
+
+.login{
+    height: 100%;
+    padding: 50px;
+}
+
+.mycard-footer{
+    padding: 10% 10% 0 10%;
+    background-color: white;
+}
+
+.google{
+    height:40%;
+    text-align: center;
+    border: none;
+}
+
+.footer-text{
+    height: 30%;
+    text-align: center;
+    font-size: large;
+}
+
+.contact-us{
+    height: 30%;
+    text-align: center;
+}
+
+.mybutton {
+    background-color: transparent;
+    transition-duration: 0.4s;
+    width: 150px;
+    height: 50px;
+    color: white;
+    border-width: thin;
+    text-align: center;
+    border-radius: 12px;
+}
+
+button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+input{
+    text-align: center;
+    border-radius: 25px;
+    border: 0;
+}
