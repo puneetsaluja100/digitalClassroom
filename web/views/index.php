@@ -18,6 +18,8 @@ if(isset($_POST['submitLogin']))
     session_start();
     $_SESSION['id'] = $result[0]['uid'];
     $_SESSION['role'] = $result[0]['role'];
+    $_SESSION['batch'] = $result[0]['batch'];
+    $_SESSION['year'] = $result[0]['year'];
     $role = "'".$_SESSION['role']."'";
     $teacher = "te";
     $student = "st";

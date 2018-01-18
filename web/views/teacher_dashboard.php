@@ -10,7 +10,8 @@
   $type = "'".(string)$_POST["type"]."'";
   $target_dir = "../../src/uploads/".$_SESSION['id']."/".$_POST["type"]."/";
   $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
-  $content = "'".$target_file."'";
+
+  $content = "'".$_FILES["fileToUpload"]["name"]."'";
   $uploadOk = 1;
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
@@ -32,7 +33,9 @@
   {
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        echo '<script language="javascript">';
+        echo 'alert("Sorry, only JPG, JPEG, PNG & GIF files are allowed.")';
+        echo '</script>';
         $uploadOk = 0;
     }
   }
@@ -40,14 +43,18 @@
   {
     if($imageFileType != "3gp" && $imageFileType != "mp4" && $imageFileType != "mkv"
     && $imageFileType != "MP4" && $imageFileType != "avi" ) {
-        echo "Sorry, only 3gp, mp4, mkv & avi files are allowed.";
+        echo '<script language="javascript">';
+        echo 'alert("Sorry, only 3gp, mp4, mkv & avi files are allowed.")';
+        echo '</script>';
         $uploadOk = 0;
     }
   }
   else if($type=='ppt')
   {
     if($imageFileType != "ppt" && $imageFileType != "pptx") {
-        echo "Sorry, only ppt, pptx files are allowed.";
+        echo '<script language="javascript">';
+        echo 'alert(""Sorry, only ppt, pptx files are allowed."")';
+        echo '</script>';
         $uploadOk = 0;
     }
   }
@@ -70,6 +77,9 @@
       $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole);
       if($result === true)
       {
+        echo '<script language="javascript">';
+        echo 'alert("Successfully Uploaded")';
+        echo '</script>';
         if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 
         } else {
@@ -110,25 +120,21 @@ function closeNav() {
 
 function goToVideos()
 {
-    alert("yes");
     location.href = "video.php";
 }
 
 function goToImages()
 {
-    alert("yes");
     location.href = "image.php";
 }
 
 function goToPPT()
 {
-    alert("yes");
     location.href = "ppt.php";
 }
 
 function goToPDF()
 {
-    alert("yes");
     location.href = "pdf.php";
 }
 
@@ -172,7 +178,7 @@ function showStudyMaterial(){
 
             <div>
                <li>
-                 <a href="#study" onclick="showStudyMaterial()" class="active">Study Material&nbsp;&nbsp;<i class="fa fa-book"></i></a>
+                 <a href="#" onclick="showStudyMaterial()" class="active">Study Material&nbsp;&nbsp;<i class="fa fa-book"></i></a>
                </li>
 
                <li>
@@ -204,40 +210,42 @@ function showStudyMaterial(){
 
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-5">
 
         <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
           <div class="card-block">
             <!-- Use any element to open the sidenav -->
             <form action="" method="post" enctype="multipart/form-data">
-              Year:
-              <select name="year">
+              <label for="year">Year:</label>
+              <select class="form-control" name="year">
                   <option value="1">First</option>
                   <option value="2">Second</option>
                   <option value="3">Third</option>
                   <option value="4">Fourth</option>
               </select>
               <br>
-              Batch:
-              <select name="batch">
-                  <option value="cs">CS</option>
-                  <option value="me">Mechanical</option>
-                  <option value="ar">Architecture</option>
-                  <option value="ec">ECE</option>
+              <label for="branch">Branch:</label>
+              <select class="form-control" name="batch">
+                  <option value="cse">CS</option>
+                  <option value="ece">Mechanical</option>
+                  <option  value="mech">Mechanical</option>
+                  <option  value="meta">Metallurgy</option>
               </select>
               <br>
-              Type:
-              <select name="type">
+              <label for="type">Type:</label>
+              <select class="form-control" name="type">
                   <option value="image">image</option>
                   <option value="video">video</option>
                   <option value="ppt">ppt</option>
                   <option value="pdf">pdf</option>
               </select>
               <br>
-              <div  style="margin-left:21%;height:20%">
+
                   <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload"></button>
-              </div>
-              <button name="submitStudyMaterial" type="submit">Submit</button>
+
+              <br>
+              <br>
+              <button class="btn btn-primary" name="submitStudyMaterial" type="submit">Submit</button>
             </form>
           </div>
         </div>
@@ -250,7 +258,7 @@ function showStudyMaterial(){
 
 
 
-    <div class="col-md-8"style="text-align:center;">
+    <div class="col-md-7"style="text-align:center;">
 
       <div>
           <div class="card" onclick="goToImages()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">

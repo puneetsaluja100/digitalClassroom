@@ -52,7 +52,7 @@
 
 		public function getTeacherDetailForApproval()
 		{
-			$query = "select * from users where role = 'te' and approve = false;";
+			$query = "select * from users where role = 'te' and approve = 'false';";
 			if($result = pg_query($this->dbconn,$query))
 			{
 				return $result;
@@ -81,6 +81,19 @@
 			{
 				$resultSendTo = getUserDataFromID($query['send_from']);//not right
 				return $result;//don't know what result does the query sends and here i have to concat the $result with $resultSendTo
+			}
+			else {
+				return false;
+			}
+		}
+
+		public function getStudyMaterialForStudent($batch,$year,$type)
+		{
+			$query = "select * from studymaterial where batch = ".$batch." and year =  ".$year." and type=".$type.";";
+			if($result = pg_query($this->dbconn,$query))
+			{
+				$result = pg_fetch_all($result);
+				return $result;
 			}
 			else {
 				return false;

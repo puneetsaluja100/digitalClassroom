@@ -22,10 +22,31 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
 
+
 function goToVideos()
 {
-
+    alert("video");
+    location.href = "video.php";
 }
+
+function goToImages()
+{
+    alert("yes");
+    location.href = "image.php";
+}
+
+function goToPPT()
+{
+    alert("yes");
+    location.href = "ppt.php";
+}
+
+function goToPDF()
+{
+    alert("yes");
+    location.href = "pdf.php";
+}
+
   </script>
 
 </head>
@@ -57,7 +78,7 @@ function goToVideos()
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
          <div class="menu"  style="text-align:center;">
             <div class="profile-userpic">
-					        <img src="../../image/image.png" class="img-responsive" alt="">
+					        <img src="../../image/images.png" class="img-responsive" alt="">
                   <a href="#">Puneet Saluja</a>
 				    </div>
             <hr>
@@ -100,46 +121,43 @@ function goToVideos()
 
   </div>
 
+  <div class="col-md-8"style="text-align:center;">
 
-
-
-
-<div class="col-md-10"style="text-align:center;">
-
-  <div>
-      <div class="card" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-        <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/images.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">Images</h4>
+    <div>
+        <div class="card" onclick="goToImages()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+          <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/images.png" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">Images</h4>
+          </div>
         </div>
-      </div>
 
 
 
-      <div class="card" onclick="goToVideos()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-        <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/videos.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">Videos</h4>
+        <div class="card" onclick="goToVideos()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+          <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/videos.png" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">Videos</h4>
+          </div>
         </div>
-      </div>
+    </div>
+
+    <div>
+          <div class="card" onclick="goToPDF()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+          <img class="card-img-top" style="height:150px;padding-top:10px" src="../../image/pdf.png" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">pdf</h4>
+          </div>
+        </div>
+
+        <div class="card" onclick="goToPPT()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+          <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/ppt.png" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">ppt</h4>
+          </div>
+        </div>
+    </div>
+
   </div>
-
-  <div>
-        <div class="card" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-        <img class="card-img-top" style="height:150px;padding-top:10px" src="../../image/pdf.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">pdf</h4>
-        </div>
-      </div>
-
-      <div class="card" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-        <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/ppt.png" alt="Card image cap">
-        <div class="card-block">
-          <h4 class="card-title">ppt</h4>
-        </div>
-      </div>
-  </div>
-
 </div>
 
 </body>
