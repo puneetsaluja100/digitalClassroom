@@ -1,5 +1,67 @@
 <?php
 
+require_once __DIR__.'/gplus/vendor/autoload.php';
+const CLIENT_ID = '522199081550-i25902t77l2or11t4ednvgicbsquv4sa.apps.googleusercontent.com';
+const CLIENT_SECRET = 'H-ZvN78za5Ms0gk7HZdYLXWH';
+const REDIRECT_URI = 'http://localhost/digitalclassroom/web/views/login.php';
+
+session_start();
+
+$client = new Google_Client();
+$client->setClientId(CLIENT_ID);
+$client->setClientSecret(CLIENT_SECRET);
+$client->setRedirectUri(REDIRECT_URI);
+$client->setScopes('email');
+
+$plus = new Google_Service_Plus($client);
+
+if(isset($_REQUEST['logout'])){
+  session_unset();
+}
+
+if(isset($_GET['code'])){
+  $client->authenticate($_GET['code']);
+  $_SESSION['access_token'] = $client->getAccessToken();
+  $redirect='';
+//  header();
+}
+
+
+if(isset($_SESSION['access_token']) && $_SESSION['access_token']){
+  $client->setAccessToken($_SESSION['access_token']);
+  $me = $plus->people->get('me');
+  $id = $me['id'];
+  $name = $me['displayName'];
+  $email = $me['emails'][0]['value'];
+  $profile_image_url = $me['image']['url'];
+  $cover_image_url = $me['cover']['coverPhoto']['url'];
+  $profile_url = $me['url'];
+
+
+
+  include "../../src/login.php";
+
+
+  $fields = array("email"=>$email);
+  $result = login($fields);
+
+
+  if($result)
+  {
+    $_SESSION['id'] = $result[0]['uid'];
+
+    header("Location:dashboard.php");
+  }
+  else
+  {
+    $errStringLogin = "* Invalid credentials";
+  }
+
+
+
+}else{
+  $authUrl = $client->createAuthUrl();
+}
 
 if(isset($_POST['submitLogin']))
 
@@ -23,6 +85,7 @@ if(isset($_POST['submitLogin']))
     $role = "'".$_SESSION['role']."'";
     $teacher = "te";
     $student = "st";
+    $admin = "ad";
     if($role=="'".$student."'")
     {
       header("Location:dashboard.php");
@@ -30,6 +93,10 @@ if(isset($_POST['submitLogin']))
     else if($role=="'".$teacher."'")
     {
       header("Location:teacher_dashboard.php");
+    }
+    else if($role=="'".$admin."'")
+    {
+      header("Location:admin.php");
     }
   }
   else
@@ -64,6 +131,35 @@ function getCorrectInput($data) {
     <link rel="stylesheet" href="../css/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css">
     <link rel="stylesheet" media="screen and (min-width: 1000px)" href="../css/style.css">
     <link rel="stylesheet" media="screen and (max-width: 1000px)" href="../css/mobile.css" />
+    <style>
+    .mybutton {
+        background-color: transparent;
+        transition-duration: 0.4s;
+        width: 150px;
+        height: 50px;
+        color: white;
+        border-width: thin;
+        text-align: center;
+        border-radius: 12px;
+    }
+    #homelogo{
+        text-align: center;
+        width: 100%;
+        padding: 20px;
+        font-size:40px;
+        display: inline-block;
+    }
+    #logo-heading{
+        font-size: 40px;
+        text-align: center;
+    }
+
+    #message{
+        padding: 42px;
+        font-size: 20px;
+        text-align: center;
+    }
+    </style>
 </head>
 <body >
 <div style="height:10%"></div>
@@ -81,7 +177,7 @@ function getCorrectInput($data) {
         </div>
         <div style="height: 100px" >
             <img src="../../image/digital_india.png" class="logo" style="width: 150px">
-
+            <a href="login.php" style="margin-left:60px"><button class="mybutton" style="background-color:#5BECB7" type="submit">Get Started</button></a>
         </div>
     </div>
     <div id="home-login" class="mycard" style="height: 650px;width: 400px;margin-left: 0;">
@@ -95,14 +191,17 @@ function getCorrectInput($data) {
                     <input class="form-control" name="email" type="email" placeholder="@email"  required><br>
                     <input class="form-control" name="password" type="password" placeholder="#password" required><br>
                     <div style="text-align: center"><a href="forget.php">forget password?</a> </div><br>
-                    <button class="mybutton" name="submitLogin" type="submit">Sign in</button>
+                    <button class="mybutton" style="background-color: 	#FF6347" name="submitLogin" type="submit">Sign in</button>
                 </form>
             </div>
         </div>
         <div class="mycard-footer" style="height: 200px">
-            <div class="google">
-                <button class="btn"><img src="../../image/google.png" style="height: 20px;width: 20px">   Sign in with Google+</button>
-            </div>
+          <div class="google">
+            <?php
+                echo "<a class='login' href='" . $authUrl . "'>" ?>
+              <button class="btn"><img src="../../image/google.png"  style="height: 20px;width: 20px">   Sign in with Google+</button>
+            </a>
+          </div>
             <div class="footer-text"><a href="register.php">Create an account</a></div>
             <hr style="margin: 0">
             <div class="contact-us">contact us</div>

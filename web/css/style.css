@@ -10,24 +10,8 @@ html,body{
     margin-right: 0;
 }
 
-#homelogo{
-    text-align: center;
-    width: 100%;
-    padding: 20px;
-    font-size:40px;
-    display: inline-block;
-}
 
-#logo-heading{
-    font-size: 40px;
-    text-align: center;
-}
 
-#message{
-    padding: 42px;
-    font-size: 20px;
-    text-align: center;
-}
 
 .mycard{
     box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
@@ -78,6 +62,7 @@ html,body{
 }
 
 .mybutton {
+    
     background-color: transparent;
     transition-duration: 0.4s;
     width: 150px;

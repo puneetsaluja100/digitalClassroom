@@ -9,10 +9,7 @@ html,body{
     background-color: 	#FF6347;
 }
 
-#homelogo{
-    width: 100%;
-    padding: 30px 10px 10px 60px;
-}
+
 
 #home-login{
     display: none;
@@ -28,6 +25,7 @@ html,body{
 }
 
 .logo{
+    text-align: center;
     width: 60px;
     height: 60px;
     padding-left: 10px;
