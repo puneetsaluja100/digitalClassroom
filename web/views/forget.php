@@ -27,7 +27,7 @@
         <div class="form-group" style="height: 280px">
             <form class="login" action="" method="post" style="text-align: center">
                 <input class="form-control" name="email" type="email" placeholder="@email"  required><br>
-                <button class="mybutton" name="forget" type="submit">Send me link</button>
+                <button class="mybutton" style="background-color: 	#FF6347" name="forget" type="submit">Send me link</button>
             </form>
         </div>
     </div>
@@ -39,7 +39,7 @@
         <div class="form-group" style="height: 280px">
             <form class="login" action="" method="post" style="text-align: center">
                 <input class="form-control" name="otp" type="number" placeholder="OTP"  required><br>
-                <button class="mybutton" name="verifyotp" type="submit">Verify OTP</button>
+                <button class="mybutton" style="background-color: 	#FF6347" name="verifyotp" type="submit">Verify OTP</button>
             </form>
         </div>
     </div>

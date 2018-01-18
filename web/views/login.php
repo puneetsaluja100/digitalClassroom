@@ -64,28 +64,6 @@ if(isset($_SESSION['access_token']) && $_SESSION['access_token']){
 }
 
 
-if(isset($_POST['submitLogin']))
-
-{
-
-include "../../src/login.php";
-$password = getCorrectInput($_POST["password"]);
-$salt = sha1(md5($password));
-$password = md5($salt.$password);
-$fields = array("email"=>$_POST['email'],"password"=>$password);
-$result = login($fields);
-
-
-if($result)
-{
-  $_SESSION['id'] = $result[0]['uid'];
-  header("Location:dashboard.php");
-}
-else
-{
-  $errStringLogin = "* Invalid credentials";
-}
-}
 function getCorrectInput($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -94,7 +72,46 @@ function getCorrectInput($data) {
 }
 
 
+if(isset($_POST['submitLogin']))
 
+{
+
+  include "../../src/login.php";
+  $password = getCorrectInput($_POST["password"]);
+  $salt = sha1(md5($password));
+  $password = md5($salt.$password);
+  $fields = array("email"=>$_POST['email'],"password"=>$password);
+  $result = login($fields);
+
+
+  if($result)
+  {
+    session_start();
+    $_SESSION['id'] = $result[0]['uid'];
+    $_SESSION['role'] = $result[0]['role'];
+    $role = "'".$_SESSION['role']."'";
+    $teacher = "te";
+    $student = "st";
+    $admin = "ad";
+    echo "$role";
+    if($role=="'".$student."'")
+    {
+      header("Location:dashboard.php");
+    }
+    else if($role=="'".$teacher."'")
+    {
+      header("Location:teacher_dashboard.php");
+    }
+    else if($role=="'".$admin."'")
+    {
+      header("Location:admin.php");
+    }
+  }
+  else
+  {
+    $errStringLogin = "* Invalid credentials";
+  }
+}
 ?>
 
 
@@ -120,7 +137,7 @@ function getCorrectInput($data) {
                         <input class="form-control" name="email" type="email" placeholder="@email"  required><br>
                         <input class="form-control" name="password" type="password" placeholder="#password" required><br>
                         <div style="text-align: center"><a href="forget.php">forget password?</a> </div><br>
-                        <button class="mybutton" name="submitLogin" type="submit">Sign in</button>
+                        <button class="mybutton" style="background-color:#FF6347"name="submitLogin" type="submit">Sign in</button>
                     </form>
                 </div>
             </div>

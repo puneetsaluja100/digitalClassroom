@@ -116,7 +116,7 @@
                   </div>
                 </div>
                 <br>
-                <button class="mybutton" name="submitRegister" type="submit">Sign up</button>
+                <button class="mybutton" style="background-color: 	#FF6347" name="submitRegister" type="submit">Sign up</button>
             </form>
         </div>
     </div>
