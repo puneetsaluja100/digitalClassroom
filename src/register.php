@@ -37,7 +37,7 @@
 				// 	}
 				// }
 				// print_r($resultSelect);
-				if(mkdir("./src/uploads/".$resultSelect[0]['uid']))
+				if(mkdir("./uploads/".$resultSelect[0]['uid']))
 					return true;
 			}
 		}

@@ -11,9 +11,6 @@
 		$salt = sha1(md5($passwordSignUp_confirm));
 		$passwordSignUp_confirm = md5($salt.$passwordSignUp_confirm);
     $roleSignUp = getCorrectInput($_POST["role"]);
-    $college_idSignUp = getCorrectInput($_POST["college_id"]);
-    $batchSignUp = getCorrectInput($_POST["batch"]);
-    $yearSignUp = getCorrectInput($_POST["year"]);
 
 		if($passwordSignUp != $passwordSignUp_confirm)
 		{
@@ -24,7 +21,17 @@
 			include "../../src/register.php";
 
 			/*associative array with keys as the column name of table and their values as the values inserted by the user in the registration form*/
-			$fields = array("username"=>$usernameSignUp,"college_id"=>$college_idSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"college_id"=>$college_idSignUp,"batch"=>$batchSignUp,"year"=>$yearSignUp);
+      if(!strcmp($roleSignUp,"st")){
+        $yearSignUp = getCorrectInput($_POST["year"]);
+        $college_idSignUp = getCorrectInput($_POST["college_id"]);
+        $batchSignUp = getCorrectInput($_POST["batch"]);
+        $fields = array("username"=>$usernameSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"batch"=>$batchSignUp,"college_id"=>$college_idSignUp,"year"=>$yearSignUp);
+      }
+      elseif(!strcmp($roleSignUp,"tr")) {
+        $college_idSignUp = -1;
+        $batchSignUp = getCorrectInput($_POST["department"]);
+        $fields = array("username"=>$usernameSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"college_id"=>$college_idSignUp,"batch"=>$batchSignUp);
+      }
  			$result = register($fields);
 			if($result === true)
 			{
@@ -80,7 +87,7 @@
                     <label><input type="radio" value="st" name="role" onclick="student()"> Student </label>
                 </div><br>
                 <div id="faculty">
-                  <select name="batch">
+                  <select name="department">
                     <option  value="cse" >Computer science</option>
                     <option  value="ece" >Electrical</option>
                     <option  value="mech">Mechanical</option>
@@ -100,11 +107,10 @@
                     <option value="ece" >Electrical</option>
                     <option value="mech">Mechanical</option>
                     <option value="meta">Metallurgy</option>
-                  </div>
                   </select>
                   </div><br>
                   <div>
-                      <input class="form-control" name="college_id" type="text" placeholder="College-ID" required><br>
+                      <input class="form-control" name="college_id" type="text" placeholder="College-ID"><br>
                   </div>
                 </div>
                 <br>

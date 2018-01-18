@@ -124,17 +124,12 @@ function getCorrectInput($data) {
                 </div>
             </div>
             <div class="mycard-footer" style="height: 200px">
-              <?php
-              /*
-               * If login url is there then display login button
-               * else print the retieved data
-              */
-              if (isset($authUrl)) {
-                  echo "<a class='login' href='" . $authUrl . "'><img src='gplus-lib/signin_button.png' height='50px'/></a>";
-              }
-              ?>
+
                 <div class="google">
+                  <?php
+                      echo "<a class='login' href='" . $authUrl . "'>" ?>
                     <button class="btn"><img src="../../image/google.png"  style="height: 20px;width: 20px">   Sign in with Google+</button>
+                  </a>
                 </div>
                 <div class="footer-text"><a href="register.php">Create an account</a></div>
                 <hr style="margin: 0">
