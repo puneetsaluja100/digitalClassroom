@@ -1,25 +1,39 @@
 <?php
+
+
 if(isset($_POST['submitLogin']))
 
 {
 
-include "../../src/login.php";
-$password = getCorrectInput($_POST["password"]);
-$salt = sha1(md5($password));
-$password = md5($salt.$password);
-$fields = array("email"=>$_POST['email'],"password"=>$password);
-$result = login($fields);
+  include "../../src/login.php";
+  $password = getCorrectInput($_POST["password"]);
+  $salt = sha1(md5($password));
+  $password = md5($salt.$password);
+  $fields = array("email"=>$_POST['email'],"password"=>$password);
+  $result = login($fields);
 
 
-if($result)
-{
-  $_SESSION['id'] = $result[0]['uid'];
-  header("Location:dashboard.php");
-}
-else
-{
-  $errStringLogin = "* Invalid credentials";
-}
+  if($result)
+  {
+    session_start();
+    $_SESSION['id'] = $result[0]['uid'];
+    $_SESSION['role'] = $result[0]['role'];
+    $role = "'".$_SESSION['role']."'";
+    $teacher = "te";
+    $student = "st";
+    if($role=="'".$student."'")
+    {
+      header("Location:dashboard.php");
+    }
+    else if($role=="'".$teacher."'")
+    {
+      header("Location:teacher_dashboard.php");
+    }
+  }
+  else
+  {
+    $errStringLogin = "* Invalid credentials";
+  }
 }
 
 function getCorrectInput($data) {

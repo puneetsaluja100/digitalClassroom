@@ -49,6 +49,7 @@ if(isset($_SESSION['access_token']) && $_SESSION['access_token']){
   if($result)
   {
     $_SESSION['id'] = $result[0]['uid'];
+
     header("Location:dashboard.php");
   }
   else

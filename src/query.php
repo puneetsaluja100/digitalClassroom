@@ -59,11 +59,15 @@
 			}
 		}
 
-		public function getStudyMaterialMadeByMeById()
+		public function getStudyMaterialMadeByMeById($type)
 		{
-			$query = "select * from users INNER JOIN (select * from studymaterial where send_from = ".$this->field['uid'].") ON studyMaterial.send_to = users.uid;";
+			//$query = "select * from users INNER JOIN (select * from studymaterial where send_from = ".$this->field['uid'].") ON studyMaterial.send_from = users.uid;";
+			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where send_from=".$this->field['uid']." and type=".$type.";" ;
 			if($result = pg_query($this->dbconn,$query))
 			{
+
+				$result = pg_fetch_all($result);
+				// print_r($result);
 				return $result;
 			}
 			else {
@@ -186,7 +190,7 @@
 			$result = pg_query($this->dbconn,$query);
 		}
 
-		public function studyMaterial($content,$sendTo,$type,$approve,$batch,$year,$assignment,$senderRole)
+		public function studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole)
 		{
 			//$content is the path or the name of the file and it is in string
 			//$sendTo is the username of the person to be send-admin or teacher name
@@ -209,7 +213,7 @@
 
 
 
-			$query = "insert into studyMaterial (content,send_to,send_from,type,approve,batch,year,assignment) values(".$content.",".$sendTo.",45,".$type.",".$approve.",".$batch.",".$year.",".$assignment.");";
+			$query = "insert into studyMaterial (content,send_to,send_from,type,approve,batch,year,assignment) values(".$content.",".$sendTo.",".$this->field['uid'].",".$type.",".$approve.",".$batch.",".$year.",".$assignment.");";
       // print_r($query);
       if($result = pg_query(getConnection(),$query))
 			{
@@ -223,7 +227,7 @@
 		public function subjectWiseStudyMaterial($content,$subject,$topic,$batch,$year)
 		{
 			//$content is an array of text. It should be in the form {"-1.jpg","1.jpg"}
-			$query = "insert into subjectwisestudymaterial (content,subject,topic,batch,year) values('".$content."','".$subject."','".$topic."','".$batch."',".$year.");"
+			$query = "insert into subjectwisestudymaterial (content,subject,topic,batch,year) values('".$content."','".$subject."','".$topic."','".$batch."',".$year.");";
 			if($result = pg_query($this->dbconn,$query))
 			{
 				return true;
@@ -239,7 +243,7 @@
 			if($result = pg_select($this->dbconn,"users",$field2))
 			{
 				$send_to = $result[0]['id'];
-				$query = "insert into message (content,send_to,send_from) values('".$message."',".$send_to.",".$this->field['uid'].");"
+				$query = "insert into message (content,send_to,send_from) values('".$message."',".$send_to.",".$this->field['uid'].");";
 				if($result1 = pg_query($this->dbconn,$query))
 				{
 					return true;
@@ -254,7 +258,7 @@
 
 		public function notification($message,$batch,$year)
 		{
-				$query = "insert into notification (content,send_from,batch,year) values('".$message."',".$this->field['uid'].",'".$batch."',".$year.");"
+				$query = "insert into notification (content,send_from,batch,year) values('".$message."',".$this->field['uid'].",'".$batch."',".$year.");";
 				if($result = pg_query($this->dbconn,$query))
 				{
 					return true;

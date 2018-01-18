@@ -1,32 +1,86 @@
 <?php
-
+  session_start();
   if(isset($_POST['submitStudyMaterial']))
   {
   $batch = "'".$_POST["batch"]."'";
   $year = "'".$_POST["year"]."'";
   $senderRole = 'te';
-  $sendTo = 1;
   $assignment = 'false';
   $approve = 'false';
   $type = "'".(string)$_POST["type"]."'";
-  $content = "'../../src/uploads/'";
-
-  include "../../src/query.php";
-
-
-  $query = new PostData($_SESSION['id']);
-  $result = $query->studyMaterial($content,$sendTo,$type,$approve,$batch,$year,$assignment,$senderRole);
+  $target_dir = "../../src/uploads/".$_SESSION['id']."/".$_POST["type"]."/";
+  $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
+  $content = "'".$target_file."'";
+  $uploadOk = 1;
+  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
 
-  if($result === true)
-  {
-    echo "yes";
-  }
-  else if($result === false)
-  {
 
+  // Check if file already exists
+  if (file_exists($target_file)) {
+      echo "Sorry, file already exists.";
+      $uploadOk = 0;
   }
 
+  // Check file size
+  if ($_FILES["fileToUpload"]["size"] > 500000000) {
+      echo "Sorry, your file is too large.";
+      $uploadOk = 0;
+  }
+  // Allow certain file formats
+  if($type=='image')
+  {
+    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+    && $imageFileType != "gif" ) {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $uploadOk = 0;
+    }
+  }
+  else if($type=='video')
+  {
+    if($imageFileType != "3gp" && $imageFileType != "mp4" && $imageFileType != "mkv"
+    && $imageFileType != "MP4" && $imageFileType != "avi" ) {
+        echo "Sorry, only 3gp, mp4, mkv & avi files are allowed.";
+        $uploadOk = 0;
+    }
+  }
+  else if($type=='ppt')
+  {
+    if($imageFileType != "ppt" && $imageFileType != "pptx") {
+        echo "Sorry, only ppt, pptx files are allowed.";
+        $uploadOk = 0;
+    }
+  }
+  else if($type=='pdf')
+  {
+    if($imageFileType != "pdf" && $imageFileType != "doc" && $imageFileType != "docx") {
+        echo "Sorry, only pdf, doc, docx files are allowed.";
+        $uploadOk = 0;
+    }
+  }
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+      echo "Sorry, your file was not uploaded.";
+  // if everything is ok, try to upload file
+  } else {
+
+      include "../../src/query.php";
+      $sentFrom = "'".$_SESSION['id']."'";
+      $query = new PostData($sentFrom);
+      $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole);
+      if($result === true)
+      {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+      }
+      else if($result === false)
+      {
+
+      }
+  }
 }
 ?>
 
@@ -56,12 +110,34 @@ function closeNav() {
 
 function goToVideos()
 {
-
+    alert("yes");
+    location.href = "video.php";
 }
+
+function goToImages()
+{
+    alert("yes");
+    location.href = "image.php";
+}
+
+function goToPPT()
+{
+    alert("yes");
+    location.href = "ppt.php";
+}
+
+function goToPDF()
+{
+    alert("yes");
+    location.href = "pdf.php";
+}
+
+
 
 function showStudyMaterial(){
 
     document.getElementById('study').style.visibility = "visible";
+    closeNav();
 
 }
 
@@ -89,7 +165,7 @@ function showStudyMaterial(){
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
          <div class="menu"  style="text-align:center;">
             <div class="profile-userpic">
-					        <img src="../../image/image.png" class="img-responsive" alt="">
+					        <img src="../../image/images.png" class="img-responsive" alt="">
                   <a href="#">Puneet Saluja</a>
 				    </div>
             <hr>
@@ -124,37 +200,98 @@ function showStudyMaterial(){
 
 
   <div id="study" style="visibility:hidden;">
-    <form action="" method="post">
-      <select name="year">
-          <option value="1">First</option>
-          <option value="2">Second</option>
-          <option value="3">Third</option>
-          <option value="4">Fourth</option>
-      </select>
-      <select name="batch">
-          <option value="cs">CS</option>
-          <option value="me">Mechanical</option>
-          <option value="ar">Architecture</option>
-          <option value="ec">ECE</option>
-      </select>
-      <select name="type">
-          <option value="image">image</option>
-          <option value="video">video</option>
-          <option value="ppt">ppt</option>
-          <option value="pdf">pdf</option>
-      </select>
-      <div  style="margin-left:21%;height:20%">
-          <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload" required></button>
+
+
+
+    <div class="row">
+      <div class="col-md-4">
+
+        <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
+          <div class="card-block">
+            <!-- Use any element to open the sidenav -->
+            <form action="" method="post" enctype="multipart/form-data">
+              Year:
+              <select name="year">
+                  <option value="1">First</option>
+                  <option value="2">Second</option>
+                  <option value="3">Third</option>
+                  <option value="4">Fourth</option>
+              </select>
+              <br>
+              Batch:
+              <select name="batch">
+                  <option value="cs">CS</option>
+                  <option value="me">Mechanical</option>
+                  <option value="ar">Architecture</option>
+                  <option value="ec">ECE</option>
+              </select>
+              <br>
+              Type:
+              <select name="type">
+                  <option value="image">image</option>
+                  <option value="video">video</option>
+                  <option value="ppt">ppt</option>
+                  <option value="pdf">pdf</option>
+              </select>
+              <br>
+              <div  style="margin-left:21%;height:20%">
+                  <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload"></button>
+              </div>
+              <button name="submitStudyMaterial" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
+
+
+
       </div>
-      <button name="submitStudyMaterial" type="submit">Submit</button>
-    </form>
+
+
+
+
+
+    <div class="col-md-8"style="text-align:center;">
+
+      <div>
+          <div class="card" onclick="goToImages()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+            <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/images.png" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Images</h4>
+            </div>
+          </div>
+
+
+
+          <div class="card" onclick="goToVideos()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+            <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/videos.png" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Videos</h4>
+            </div>
+          </div>
+      </div>
+
+      <div>
+            <div class="card" onclick="goToPDF()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+            <img class="card-img-top" style="height:150px;padding-top:10px" src="../../image/pdf.png" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">pdf</h4>
+            </div>
+          </div>
+
+          <div class="card" onclick="goToPPT()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+            <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/ppt.png" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">ppt</h4>
+            </div>
+          </div>
+      </div>
+
+    </div>
+
+
+
+
   </div>
-
-
-
-
-
-
 
 
 </body>
