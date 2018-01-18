@@ -22,15 +22,17 @@
 
 			/*associative array with keys as the column name of table and their values as the values inserted by the user in the registration form*/
       if(!strcmp($roleSignUp,"st")){
+        $approveSignUp = true;
         $yearSignUp = getCorrectInput($_POST["year"]);
         $college_idSignUp = getCorrectInput($_POST["college_id"]);
         $batchSignUp = getCorrectInput($_POST["batch"]);
-        $fields = array("username"=>$usernameSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"batch"=>$batchSignUp,"college_id"=>$college_idSignUp,"year"=>$yearSignUp);
+        $fields = array("approve"=>$approveSignUp,"username"=>$usernameSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"batch"=>$batchSignUp,"college_id"=>$college_idSignUp,"year"=>$yearSignUp);
       }
-      elseif(!strcmp($roleSignUp,"tr")) {
+      elseif(!strcmp($roleSignUp,"te")) {
         $college_idSignUp = -1;
         $batchSignUp = getCorrectInput($_POST["department"]);
-        $fields = array("username"=>$usernameSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"college_id"=>$college_idSignUp,"batch"=>$batchSignUp);
+        $approveSignUp = false;
+        $fields = array("approve"=>$approveSignUp,"username"=>$usernameSignUp,"email"=>$emailSignUp,"password"=>$passwordSignUp,"role"=>$roleSignUp,"college_id"=>$college_idSignUp,"batch"=>$batchSignUp);
       }
  			$result = register($fields);
 			if($result === true)
@@ -83,7 +85,7 @@
                 <input class="form-control" name="password" type="password" placeholder="#password" required><br>
                 <input class="form-control" name="cpassword" type="password" placeholder="#confirm-password" required><br>
                 <div class="radio">
-                    <label><input type="radio" value="tr" name="role" onclick="faculty()"> Faculty </label>
+                    <label><input type="radio" value="te" name="role" onclick="faculty()"> Faculty </label>
                     <label><input type="radio" value="st" name="role" onclick="student()"> Student </label>
                 </div><br>
                 <div id="faculty">
