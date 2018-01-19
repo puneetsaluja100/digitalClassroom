@@ -55,6 +55,7 @@
 			$query = "select * from users where role = 'te' and approve = 'false';";
 			if($result = pg_query($this->dbconn,$query))
 			{
+				$result = pg_fetch_all($result);
 				return $result;
 			}
 		}
@@ -89,7 +90,7 @@
 
 		public function getStudyMaterialForStudent($batch,$year,$type,$assignment)
 		{
-			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where studyMaterial.batch = ".$batch." and studyMaterial.year =  ".$year." and studyMaterial.type=".$type."and assignment=".$assignment.";";
+			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where studyMaterial.approve=true and studyMaterial.batch = ".$batch." and studyMaterial.year =  ".$year." and studyMaterial.type=".$type."and assignment=".$assignment.";";
 			if($result = pg_query($this->dbconn,$query))
 			{
 				$result = pg_fetch_all($result);
@@ -99,6 +100,21 @@
 				return false;
 			}
 		}
+
+
+		public function getStudyMaterialForAdmin()
+		{
+			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where studyMaterial.approve = false and studyMaterial.assignment = false;";
+			if($result = pg_query($this->dbconn,$query))
+			{
+				$result = pg_fetch_all($result);
+				return $result;
+			}
+			else {
+				return false;
+			}
+		}
+
 
 		public function getSubjectWiseStudyMaterialForStudent($batch,$year)
 		{
@@ -201,6 +217,20 @@
 			//here $uid is the uid of teacher
 			$query = "update users set approve = true where uid = ".$uid.";";
 			$result = pg_query($this->dbconn,$query);
+		}
+
+		public function approveStudyMaterial($sid)
+		{
+			$query = "update studyMaterial set approve = true where sid = ".$sid.";";
+			$result = pg_query($this->dbconn,$query);
+			return $result;
+		}
+
+		public function rejectStudyMaterial($sid)
+		{
+			$query = "delete from studyMaterial where sid = ".$sid.";";
+			$result = pg_query($this->dbconn,$query);
+			return $result;
 		}
 
 		public function studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole)

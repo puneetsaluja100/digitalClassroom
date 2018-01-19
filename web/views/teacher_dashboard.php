@@ -16,20 +16,13 @@
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
 
-
-    // Check if file already exists
-    if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
-        $uploadOk = 0;
-    }
-
     // Check file size
     if ($_FILES["fileToUpload"]["size"] > 500000000) {
         echo "Sorry, your file is too large.";
         $uploadOk = 0;
     }
     // Allow certain file formats
-    if($type=='image')
+    if($_POST["type"] == 'image')
     {
       if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
       && $imageFileType != "gif" ) {
@@ -39,7 +32,7 @@
           $uploadOk = 0;
       }
     }
-    else if($type=='video')
+    else if($_POST["type"]=='video')
     {
       if($imageFileType != "3gp" && $imageFileType != "mp4" && $imageFileType != "mkv"
       && $imageFileType != "MP4" && $imageFileType != "avi" ) {
@@ -49,7 +42,7 @@
           $uploadOk = 0;
       }
     }
-    else if($type=='ppt')
+    else if($_POST["type"]=='ppt')
     {
       if($imageFileType != "ppt" && $imageFileType != "pptx") {
           echo '<script language="javascript">';
@@ -58,7 +51,7 @@
           $uploadOk = 0;
       }
     }
-    else if($type=='pdf')
+    else if($_POST["type"]=='pdf')
     {
       if($imageFileType != "pdf" && $imageFileType != "doc" && $imageFileType != "docx") {
           echo "Sorry, only pdf, doc, docx files are allowed.";
@@ -67,14 +60,14 @@
     }
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
+        //echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
     } else {
 
         include "../../src/query.php";
         $sentFrom = "'".$_SESSION['id']."'";
         $query = new PostData($sentFrom);
-        $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole);
+        $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole,1);
         if($result === true)
         {
           echo '<script language="javascript">';
@@ -100,7 +93,7 @@
     $year = "'".$_POST["year"]."'";
     $senderRole = 'te';
     $assignment = 'true';
-    $approve = 'false';
+    $approve = 'true';
     $type = "'".(string)$_POST["type"]."'";
     $target_dir = "../../src/uploads/".$_SESSION['id']."/".$_POST["type"]."/";
     $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
@@ -140,7 +133,7 @@
         include "../../src/query.php";
         $sentFrom = "'".$_SESSION['id']."'";
         $query = new PostData($sentFrom);
-        $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole);
+        $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole,1);
         if($result === true)
         {
           echo '<script language="javascript">';

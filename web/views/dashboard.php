@@ -6,6 +6,64 @@ $query_get = new GetData($uid);
 $query_post = new PostData($uid);
 $userdata = $query_get->getUserDataFromID($uid);
 $notification = $query_get->notify($userdata['batch'],$userdata['year']);
+
+if(isset($_REQUEST['submitAssignment'])){
+  $batch = "'".$_SESSION["batch"]."'";
+  $year = -1;
+  $senderRole = 'st';
+  $assignment = 'true';
+  $approve = 'true';
+  $type = 'pdf';
+  $target_dir = "../../src/uploads/".$_SESSION['id']."/pdf/";
+  $target_file = $target_dir.basename($_FILES["assignmentToUpload"]["name"]);
+
+  $content = "'".$_FILES["assignmentToUpload"]["name"]."'";
+  $uploadOk = 1;
+  $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+  // Check file size
+  if ($_FILES["assignmentToUpload"]["size"] > 500000000) {
+      echo "Sorry, your file is too large.";
+      $uploadOk = 0;
+  }
+
+  if($_POST["type"]=='pdf')
+  {
+    if($imageFileType != "pdf" && $imageFileType != "doc" && $imageFileType != "docx") {
+        echo "Sorry, only pdf, doc, docx files are allowed.";
+        $uploadOk = 0;
+    }
+  }
+  // Check if $uploadOk is set to 0 by an error
+  if ($uploadOk == 0) {
+      echo "Sorry, your file was not uploaded.";
+  // if everything is ok, try to upload file
+  } else {
+
+      include "../../src/query.php";
+      $sentFrom = "'".$_SESSION['id']."'";
+      $sendTo = "'".$_POST["send_to"]."'";
+      $query = new PostData($sentFrom);
+      $result = $query->studyMaterial($content,"'".$type."'",$approve,$batch,$year,$assignment,$senderRole,$sendTo);
+      if($result === true)
+      {
+        echo '<script language="javascript">';
+        echo 'alert("Successfully Uploaded")';
+        echo '</script>';
+        if (move_uploaded_file($_FILES["assignmentToUpload"]["tmp_name"], $target_file)) {
+          header("Location:dashboard.php");
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+      }
+      else if($result === false)
+      {
+
+      }
+  }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +75,7 @@ $notification = $query_get->notify($userdata['batch'],$userdata['year']);
   <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="../css/style_dashboard.css">
-  <script>
+  <script type="text/javascript">
   /* Set the width of the side navigation to 250px */
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";

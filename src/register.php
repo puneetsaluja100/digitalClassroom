@@ -38,8 +38,8 @@
 				// }
 				// print_r($resultSelect);
 				if(mkdir("../../src/uploads/".$resultSelect[0]['uid'])){
-					mkdir("../../src/uploads/".$resultSelect[0]['uid']."/images");
-					mkdir("../../src/uploads/".$resultSelect[0]['uid']."/videos");
+					mkdir("../../src/uploads/".$resultSelect[0]['uid']."/image");
+					mkdir("../../src/uploads/".$resultSelect[0]['uid']."/video");
 					mkdir("../../src/uploads/".$resultSelect[0]['uid']."/pdf");
 					mkdir("../../src/uploads/".$resultSelect[0]['uid']."/ppt");
 					return true;
