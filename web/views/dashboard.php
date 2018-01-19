@@ -1,3 +1,13 @@
+<?php
+session_start();
+include "../../src/query.php";
+$uid = $_SESSION['id'];
+$query_get = new GetData($uid);
+$query_post = new PostData($uid);
+$userdata = $query_get->getUserDataFromID($uid);
+$notification = $query_get->notify($userdata['batch'],$userdata['year']);
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +25,14 @@ function openNav() {
 
 function logout() {
   session_unset();
+}
+
+function openNotify(){
+  document.getElementById("notifynav").style.width = "250px";
+}
+
+function closeNotify(){
+  document.getElementById("notifynav").style.width = "0";
 }
 
 /* Set the width of the side navigation to 0 */
@@ -55,17 +73,21 @@ function goToPDF()
 
   <nav class="navbar navbar-inverse bg-inverse">
 
-
       <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
       </span>
 
 
-      <ul class="nav navbar-nav navbar-right">
+
+      <ul class="nav navbar-nav navbar-right pull-right">
         <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
-        <img class="img-responsive" src='videos.png' width=100% height=100% style='padding:0'></img>
+
+      <ul class="nav navbar-nav navbar-right pull-right">
+        <li class="active">  <a class="btn btn-small btn-primary pull-right" type="button" onclick="openNotify()"><span class="fa fa-bell"></span></a></li>
       </ul>
+      <!-- <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
+        <img class="img-responsive" src='../../image/videos.png' width=100% height=100% style='padding:0'></img>
+      </ul> -->
 
 
 
@@ -78,8 +100,10 @@ function goToPDF()
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
          <div class="menu"  style="text-align:center;">
             <div class="profile-userpic">
-					        <img src="../../image/images.png" class="img-responsive" alt="">
-                  <a href="#">Puneet Saluja</a>
+			        <img src="../../image/<?php echo $userdata['profile_picture'] ?>" alt="../../image/image.png" class="img-responsive" alt="">
+            </div>
+            <div>
+              <span style="font-size:25px;color:#ffffff;"><?php echo $userdata['username'] ?></span>
 				    </div>
             <hr>
 
@@ -98,6 +122,9 @@ function goToPDF()
                  <a href="#">Performance&nbsp;&nbsp;<span class="fa fa-line-chart"></span></a>
                </li>
 
+               <li>
+                 <a href="discussion_portal.php">Discussion Portal&nbsp;&nbsp;<span class="fa fa-wechat"></span></a>
+               </li>
             </div>
             <div class="card">
               <div class="header">
@@ -111,6 +138,23 @@ function goToPDF()
               </div>
             </div>
          </div>
+  </div>
+
+  <div id="notifynav" class="sidenavRight">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNotify()">&times;</a>
+      <div class="menu" style="text-align:center;">
+        <?php while ($row = pg_fetch_row($notification)) {
+            $sender = $query_get->getUserDataFromID($row[2]);
+          ?>
+          <li style="margin-top:2%;">
+            <span style="color:#ffffff;"><?php echo $row[1] ?></span>
+            <div>
+              <span>From: <?php echo $sender['username']?></span>
+            </div>
+          </li>
+        <?php } ?>
+      </div>
+    </a>
   </div>
 
 
@@ -161,3 +205,4 @@ function goToPDF()
 </div>
 
 </body>
+</html>

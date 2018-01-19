@@ -14,7 +14,7 @@
 
     public function __destruct()
     {
-      pg_close($this->dbconn);
+      // pg_close($this->dbconn);
     }
 
     public function getUserDataFromID($id)
@@ -22,7 +22,7 @@
 			$field2 = array("uid"=>$id);
 			if($result = pg_select($this->dbconn,"users",$field2))
 			{
-				return $result;
+				return $result[0];
 			}
 			else
 				return "Sorry, Couldn't get the user data";
@@ -127,7 +127,7 @@
 		public function getMessages()
 		{
 			//all the messages the user received or send
-			$query = "select * from message where send_from = ".$this->field['uid']." or send_to = ".$this->fiels['uid'].";";
+			$query = "select * from message where send_from = ".$this->field['uid']." or send_to = ".$this->field['uid']." order by mid asc;";
 			if($result = pg_query($this->dbconn,$query))
 			{
 				return $result;
@@ -164,7 +164,7 @@
 
 		public function __destruct()
 		{
-			pg_close($this->dbconn);
+			// pg_close($this->dbconn);
 		}
 
 		public function changeProfilePic($userpic)
@@ -255,18 +255,35 @@
 			$field2 = array("username"=>$sendToUsername);
 			if($result = pg_select($this->dbconn,"users",$field2))
 			{
-				$send_to = $result[0]['id'];
-				$query = "insert into message (content,send_to,send_from) values('".$message."',".$send_to.",".$this->field['uid'].");";
-				if($result1 = pg_query($this->dbconn,$query))
-				{
-					return true;
+				if($result != []){
+					$send_to = $result[0]['uid'];
+					print_r($send_to);
+					$query = "insert into message (content,send_to,send_from) values('".$message."',".$send_to.",".$this->field['uid'].");";
+					if($result1 = pg_query($this->dbconn,$query))
+					{
+						return true;
+					}
+					else {
+						return false;
+					}
 				}
-				else {
+				else{
 					return false;
 				}
 			}
 			else
 				return false;
+		}
+
+		public function deleteMessage($mid){
+			$query = "delete from message where mid = ".$mid.";";
+			if($result = pg_query($this->dbconn,$query))
+			{
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 
 		public function notification($message,$batch,$year)

@@ -31,7 +31,8 @@ function goToVideos()
 
 function approve(uid){
     <?php
-        echo "approveTeacher(uid)";
+        $query_post->approveTeacher(uid);
+        // echo "approveTeacher(uid)";
     ?>
 }
 
@@ -119,7 +120,7 @@ function reject(uid)
     //$sentFrom = "'".$_SESSION['id']."'";
       $uid = 1;
     $query = new GetData($uid);
-
+    $query_post = new PostData($uid);
     echo "<TR class="."table-success"."><TH>Name</TH><TH>email</TH><TH>Department</TH><TH>Action</TH></TR>";
     echo "<form id='' method='post' action=''>";
     $result = $query->getTeacherDetailForApproval();

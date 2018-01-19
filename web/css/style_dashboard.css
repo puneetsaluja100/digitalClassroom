@@ -17,6 +17,20 @@ div.card {
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
+.sidenavRight {
+    height:50%;
+    width:0;
+    position: fixed;
+    z-index: 1;
+    top:0;
+    right:0;
+    border-radius: 2%;
+    background-color: #111;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
 /* The navigation menu links */
 .sidenav a {
     text-decoration: none;
@@ -26,8 +40,39 @@ div.card {
     transition: 0.3s;
 }
 
+.sidenavRight a {
+  text-decoration: none;
+  font-size: 30px;
+  color: #FFFFFF;
+  text-align: center;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenavRight .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 450px;
+}
+
+.sidenavRight li {
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: blue;
+  padding:1%;
+  margin-left:5%;
+  margin-right:5%;
+  border-radius: 10%;
+}
+
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenavRight a:hover {
     color: #f1f1f1;
 }
 
