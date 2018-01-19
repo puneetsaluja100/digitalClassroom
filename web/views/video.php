@@ -10,13 +10,15 @@
   $student = "st";
   if($role=="'".$student."'")
   {
+    $assignment = 'false';
     $batch =  "'".$_SESSION['batch']."'";
     $year =  "'".$_SESSION['year']."'";
-    $result = $query->getStudyMaterialForStudent($batch,$year,"'".$type."'");
+    $result = $query->getStudyMaterialForStudent($batch,$year,"'".$type."'",$assignment);
   }
   else if($role=="'".$teacher."'")
   {
-    $result = $query->getStudyMaterialMadeByMeById("'".$type."'");
+    $assignment = 'false';
+    $result = $query->getStudyMaterialMadeByMeById("'".$type."'",$assignment);
   }
 
 ?>

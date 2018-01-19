@@ -14,7 +14,7 @@
 
     public function __destruct()
     {
-      pg_close($this->dbconn);
+    //  pg_close($this->dbconn);
     }
 
     public function getUserDataFromID($id)
@@ -59,10 +59,10 @@
 			}
 		}
 
-		public function getStudyMaterialMadeByMeById($type)
+		public function getStudyMaterialMadeByMeById($type,$assignment)
 		{
 			//$query = "select * from users INNER JOIN (select * from studymaterial where send_from = ".$this->field['uid'].") ON studyMaterial.send_from = users.uid;";
-			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where send_from=".$this->field['uid']." and type=".$type.";" ;
+			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where send_from=".$this->field['uid']." and type=".$type."and assignment=".$assignment.";" ;
 			if($result = pg_query($this->dbconn,$query))
 			{
 
@@ -87,9 +87,9 @@
 			}
 		}
 
-		public function getStudyMaterialForStudent($batch,$year,$type)
+		public function getStudyMaterialForStudent($batch,$year,$type,$assignment)
 		{
-			$query = "select * from studymaterial where batch = ".$batch." and year =  ".$year." and type=".$type.";";
+			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where studyMaterial.batch = ".$batch." and studyMaterial.year =  ".$year." and studyMaterial.type=".$type."and assignment=".$assignment.";";
 			if($result = pg_query($this->dbconn,$query))
 			{
 				$result = pg_fetch_all($result);

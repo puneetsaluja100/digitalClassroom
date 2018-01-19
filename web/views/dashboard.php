@@ -1,3 +1,8 @@
+<?php
+
+  session_start();
+
+ ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,26 +30,40 @@ function closeNav() {
 
 function goToVideos()
 {
-    alert("video");
     location.href = "video.php";
 }
 
 function goToImages()
 {
-    alert("yes");
     location.href = "image.php";
 }
 
 function goToPPT()
 {
-    alert("yes");
     location.href = "ppt.php";
 }
 
 function goToPDF()
 {
-    alert("yes");
     location.href = "pdf.php";
+}
+
+function showStudyMaterial(){
+    var el = document.getElementById('assignment');
+    el.style.display = 'none';
+    document.getElementById('study').removeAttribute("style");
+    closeNav();
+}
+
+function showAssignments(){
+    var el = document.getElementById('study');
+    el.style.display = 'none';
+    document.getElementById('assignment').removeAttribute("style");
+    closeNav();
+}
+
+function downloadPDF(path){
+  location.href = path;
 }
 
   </script>
@@ -87,11 +106,11 @@ function goToPDF()
             <div>
 
                <li>
-                 <a href="#" class="active">Quiz&nbsp;&nbsp;<i class="fa fa-book"></i></a>
+                 <a href="#" class="active" onclick="showStudyMaterial()">Study Material&nbsp;&nbsp;<i class="fa fa-book"></i></a>
                </li>
 
                <li>
-                 <a href="#">Assignments&nbsp;&nbsp;<span class="fa fa-pencil"></span></a>
+                 <a href="#"  onclick="showAssignments()">Assignments&nbsp;&nbsp;<span class="fa fa-pencil"></span></a>
                </li>
 
                <li>
@@ -114,7 +133,7 @@ function goToPDF()
   </div>
 
 
-<div class="row">
+<div class="row" id="study">
   <div class="col-md-2">
 
   <!-- Use any element to open the sidenav -->
@@ -155,6 +174,56 @@ function goToPDF()
             <h4 class="card-title">ppt</h4>
           </div>
         </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="assignment" style="display:none;">
+  <div class="row">
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10" style="text-align:center;">
+
+      <?php
+          include_once "../../src/query.php";
+          $sentFrom = "'".$_SESSION['id']."'";
+          $query = new GetData($sentFrom);
+          $type = "pdf";
+          $assignment = 'true';
+          $role = "'".$_SESSION['role']."'";
+          $teacher = "te";
+          $student = "st";
+          if($role=="'".$student."'")
+          {
+            $batch =  "'".$_SESSION['batch']."'";
+            $year =  "'".$_SESSION['year']."'";
+            $assignment = 'true';
+            $assignments = $query->getStudyMaterialForStudent($batch,$year,"'".$type."'",$assignment);
+            if($assignments)
+            {
+              echo "<div>
+                <br>
+                <table align='center' class='table table-hover table-striped' style='width:70%;font-size:15px'>
+                <thead class='thead-inverse'><TR class='danger'><TH style='text-align:center;'>Assignment</TH><TH style='text-align:center;'>Faculty</TH><TH style='text-align:center;'>Download</TH></TR></thread>";
+              foreach ($assignments as $row) {
+                $fileName = basename($row['content'],".pdf");
+                $path = "'"."../../src/uploads/".$row['send_from']."/".$row['type']."/".$row['content']."'";
+                //file name having spaces have problem
+
+                echo "<TR><TD>".$fileName."</TD><TD>".$row['username']."</TD><TD><button type='button' onclick=downloadPDF(".$path.") class='btn btn-info'>Download</button></TD></TR>";
+              }
+              echo "</table>
+              </div>";
+            }
+            else{
+              echo "no data available";
+            }
+          }
+       ?>
+    </div>
+    <div class="col-md-1">
     </div>
 
   </div>
