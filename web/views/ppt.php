@@ -10,13 +10,15 @@
   $student = "st";
   if($role=="'".$student."'")
   {
+    $assignment = 'false';
     $batch =  "'".$_SESSION['batch']."'";
     $year =  "'".$_SESSION['year']."'";
-    $result = $query->getStudyMaterialForStudent($batch,$year,"'".$type."'");
+    $result = $query->getStudyMaterialForStudent($batch,$year,"'".$type."'",$assignment);
   }
   else if($role=="'".$teacher."'")
   {
-    $result = $query->getStudyMaterialMadeByMeById("'".$type."'");
+    $assignment = 'false';
+    $result = $query->getStudyMaterialMadeByMeById("'".$type."'",$assignment);
   }
 
   if($result)
@@ -52,7 +54,9 @@
     </div>
 
     <div class="row">
-    <div class="col-md-12" style="text-align:center;">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10" style="text-align:center;">
           <?php
             if($result)
             {
@@ -74,6 +78,8 @@
               echo "no data available";
             }
            ?>
+   </div>
+   <div class="col-md-1">
    </div>
  </div>
   </body>
