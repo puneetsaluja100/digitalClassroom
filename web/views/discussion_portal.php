@@ -6,6 +6,8 @@
   $messages = $query_get->getMessages();
   // print_r ($messages);
   $query_post = new PostData($uid);
+  $userdata = $query_get->getUserDataFromID($uid);
+
 
   $toErr = "";
   $to = $content = "";
@@ -18,12 +20,11 @@
     $content = $_POST["message"];
     if($toErr == ""){
       if($query_post->messages($content,$to)){
-        $to = $content = "";
-        // if($query_post->notification("You received a message","cse",3)){
-        //   echo "success";
-        // }else{
-        //   echo "failure";
-        // }
+        if($query_post->notification($content,$userdata['batch'],$userdata['year'])){
+          echo "success";
+        }else{
+          echo "failure";
+        }
       }else {
         echo "Sorry no ".$to." exists.";
         $to = "";
