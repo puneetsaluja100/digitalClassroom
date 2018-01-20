@@ -1,57 +1,51 @@
 <?php
+    include "../../src/query.php";
+    $query_get = new GetData(1);
+    $query_post = new PostData(1);
+
     if(isset($_REQUEST['Approve'])){
         $uid = $_POST['uid'];
-        include_once "../../src/query.php";
-        $query = new PostData(1);
-        $result = $query->approveTeacher($uid);
+        $result = $query_post->approveTeacher($uid);
         if($result)
         {
           echo '<script language="javascript">';
           echo 'alert("Teacher Account Successfully Approved")';
           echo '</script>';
-          header("Location:admin.php");
+          //header("Location:admin.php");
         }
     }
     else if(isset($_REQUEST['Reject'])){
         $uid = $_POST['uid'];
-        include_once "../../src/query.php";
-        $query = new PostData(1);
-        $result = $query->rejectTeacher($uid);
+        $result = $query_post->rejectTeacher($uid);
         if($result)
         {
           echo '<script language="javascript">';
           echo 'alert("Teacher Account Successfully Rejected")';
           echo '</script>';
-          header("Location:admin.php");
+          //header("Location:admin.php");
         }
     }
     else if(isset($_REQUEST['approveAssignment'])){
           $sid = $_POST['sid'];
-          echo($sid);
-          include_once "../../src/query.php";
-          $query = new PostData(1);
-          $result = $query->approveStudyMaterial($sid);
+          $result = $query_post->approveStudyMaterial($sid);
           if($result)
           {
             echo '<script language="javascript">';
             echo 'alert("Study Material Successfully Approved")';
             echo '</script>';
-            header("Location:admin.php");
+            //header("Location:admin.php");
           }
 
       }
       else if(isset($_REQUEST['rejectAssignment'])){
             $sid = $_POST['sid'];
-            echo($sid);
-            include_once "../../src/query.php";
-            $query = new PostData(1);
-            $result = $query->approveStudyMaterial($sid);
+            $result = $query_post->approveStudyMaterial($sid);
             if($result)
             {
               echo '<script language="javascript">';
               echo 'alert("Study Material Rejected")';
               echo '</script>';
-              header("Location:admin.php");
+              //header("Location:admin.php");
             }
         }
  ?>
@@ -154,13 +148,11 @@
     <table align='center' class="table table-hover" >
       <?php
       session_start();
-      include "../../src/query.php";
       //$sentFrom = "'".$_SESSION['id']."'";
       $uid = 1;
-      $query = new GetData($uid);
 
       echo "<TR class="."table-success"."><TH>Name</TH><TH>email</TH><TH>Department</TH><TH>Action</TH></TR>";
-      $result = $query->getTeacherDetailForApproval();
+      $result = $query_get->getTeacherDetailForApproval();
       echo "<TR class="."active".">";
       if($result)
       {
@@ -175,14 +167,12 @@
   <div id="assignment" style="display:none;">
     <div style="text-align:center;">
     <?php
-        include_once "../../src/query.php";
         $uid = "'".$_SESSION['id']."'";
-        $query = new GetData($uid);
         $role = "'".$_SESSION['role']."'";
         $admin = "ad";
         if($role=="'".$admin."'")
         {
-          $assignments = $query->getStudyMaterialForAdmin();
+          $assignments = $query_get->getStudyMaterialForAdmin();
           if($assignments)
           {
             echo "<div>

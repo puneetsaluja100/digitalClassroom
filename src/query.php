@@ -210,6 +210,7 @@
 			//here $uid is the uid of teacher
 			$query = "delete from users where uid = ".$uid.";";
 			$result = pg_query($this->dbconn,$query);
+			return $result;
 		}
 
 		public function approveTeacher($uid)
@@ -217,6 +218,7 @@
 			//here $uid is the uid of teacher
 			$query = "update users set approve = true where uid = ".$uid.";";
 			$result = pg_query($this->dbconn,$query);
+			return $result;
 		}
 
 		public function approveStudyMaterial($sid)
