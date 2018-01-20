@@ -233,7 +233,7 @@
 			return $result;
 		}
 
-		public function studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole)
+		public function studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole,$sendTo)
 		{
 			//$content is the path or the name of the file and it is in string
 			//$sendTo is the username of the person to be send-admin or teacher name
@@ -247,18 +247,13 @@
 			}
 			if($senderRole == 'st')
 			{
-				$query1 = "select uid from users where username = ".$sendTo.";";
-				if($sendTo = pg_query($this->dbconn,$query1))
-				{
-					$sendTo = $sendTo[0];
-				}
+
 			}
 
 
 
 			$query = "insert into studyMaterial (content,send_to,send_from,type,approve,batch,year,assignment) values(".$content.",".$sendTo.",".$this->field['uid'].",".$type.",".$approve.",".$batch.",".$year.",".$assignment.");";
-      // print_r($query);
-      if($result = pg_query(getConnection(),$query))
+			if($result = pg_query(getConnection(),$query))
 			{
 				return true;
 			}

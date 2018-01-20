@@ -16,7 +16,6 @@ if(isset($_REQUEST['submitAssignment'])){
   $type = 'pdf';
   $target_dir = "../../src/uploads/".$_SESSION['id']."/pdf/";
   $target_file = $target_dir.basename($_FILES["assignmentToUpload"]["name"]);
-
   $content = "'".$_FILES["assignmentToUpload"]["name"]."'";
   $uploadOk = 1;
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -27,31 +26,19 @@ if(isset($_REQUEST['submitAssignment'])){
       $uploadOk = 0;
   }
 
-  if($_POST["type"]=='pdf')
-  {
-    if($imageFileType != "pdf" && $imageFileType != "doc" && $imageFileType != "docx") {
-        echo "Sorry, only pdf, doc, docx files are allowed.";
-        $uploadOk = 0;
-    }
-  }
   // Check if $uploadOk is set to 0 by an error
   if ($uploadOk == 0) {
       echo "Sorry, your file was not uploaded.";
   // if everything is ok, try to upload file
   } else {
-
-      include "../../src/query.php";
-      $sentFrom = "'".$_SESSION['id']."'";
       $sendTo = "'".$_POST["send_to"]."'";
-      $query = new PostData($sentFrom);
-      $result = $query->studyMaterial($content,"'".$type."'",$approve,$batch,$year,$assignment,$senderRole,$sendTo);
+      $result = $query_post->studyMaterial($content,"'".$type."'",$approve,$batch,$year,$assignment,$senderRole,$sendTo);
       if($result === true)
       {
-        echo '<script language="javascript">';
-        echo 'alert("Successfully Uploaded")';
-        echo '</script>';
         if (move_uploaded_file($_FILES["assignmentToUpload"]["tmp_name"], $target_file)) {
-          header("Location:dashboard.php");
+          echo '<script language="javascript">';
+          echo 'alert("Successfully Uploaded")';
+          echo '</script>';
         } else {
             echo "Sorry, there was an error uploading your file.";
         }
@@ -303,13 +290,13 @@ function downloadPDF(path){
               echo "<div>
                 <br>
                 <table align='center' class='table table-hover table-striped' style='width:70%;font-size:15px'>
-                <thead class='thead-inverse'><TR class='danger'><TH style='text-align:center;'>Assignment</TH><TH style='text-align:center;'>Faculty</TH><TH style='text-align:center;'>Download</TH></TR></thread>";
+                <thead class='thead-inverse'><TR class='danger'><TH style='text-align:center;'>Assignment</TH><TH style='text-align:center;'>Faculty</TH><TH style='text-align:center;'>Download</TH><TH style='text-align:center;'>Submit Assignment</TH><TH></TH></TR></thread>";
               foreach ($assignments as $row) {
                 $fileName = basename($row['content'],".pdf");
                 $path = "'"."../../src/uploads/".$row['send_from']."/".$row['type']."/".$row['content']."'";
                 //file name having spaces have problem
 
-                echo "<TR><TD>".$fileName."</TD><TD>".$row['username']."</TD><TD><button type='button' onclick=downloadPDF(".$path.") class='btn btn-info'>Download</button></TD></TR>";
+                echo "<TR><TD>".$fileName."</TD><TD>".$row['username']."</TD><TD><button type='button' onclick=downloadPDF(".$path.") class='btn btn-info'>Download</button></TD><form enctype='multipart/form-data' action='' method='post'><input style='display:none;' name='send_to' value='".$row['send_from']."'><TD><input type='file' name='assignmentToUpload' id='assignmentToUpload'></TD><TD><button name='submitAssignment' value='submitAssignment' type='submit' class='btn btn-info'>Submit</button></form></TD></TR>";
               }
               echo "</table>
               </div>";
