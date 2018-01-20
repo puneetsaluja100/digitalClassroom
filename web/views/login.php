@@ -80,20 +80,23 @@ if(isset($_POST['submitLogin']))
   $password = getCorrectInput($_POST["password"]);
   $salt = sha1(md5($password));
   $password = md5($salt.$password);
-  $fields = array("email"=>$_POST['email'],"password"=>$password);
+  $fields = array("email"=>$_POST['email'],"password"=>$password,"approve"=>true);
   $result = login($fields);
 
 
   if($result)
   {
-    session_start();
+    //session_start();
     $_SESSION['id'] = $result[0]['uid'];
     $_SESSION['role'] = $result[0]['role'];
+
     $role = "'".$_SESSION['role']."'";
+
+
     $teacher = "te";
     $student = "st";
     $admin = "ad";
-    echo "$role";
+
     if($role=="'".$student."'")
     {
       header("Location:dashboard.php");
@@ -109,6 +112,7 @@ if(isset($_POST['submitLogin']))
   }
   else
   {
+    echo "<script>alert('Your approval is pending') </script>";
     $errStringLogin = "* Invalid credentials";
   }
 }

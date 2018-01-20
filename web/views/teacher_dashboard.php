@@ -264,7 +264,7 @@ function downloadPDF(path){
                </li>
 
                <li>
-                 <a href="#">Quiz&nbsp;&nbsp;<span class="fa fa-line-chart"></span></a>
+                 <a href="profile.php">Settings&nbsp;&nbsp;<span class="fa fa-line-chart"></span></a>
                </li>
 
             </div>
