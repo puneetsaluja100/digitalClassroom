@@ -1,5 +1,14 @@
 <?php
+  //teacher dashboard
   session_start();
+  include "../../src/query.php";
+  $uid = $_SESSION['id'];
+  $query_get = new GetData($uid);
+  $query_post = new PostData($uid);
+  $userdata = $query_get->getUserDataFromID($uid);
+  $notification = $query_get->notify($userdata['batch'],$userdata['year']);
+
+  //to submit assignment
   if(isset($_POST['submitStudyMaterial']))
   {
     $batch = "'".$_POST["batch"]."'";
@@ -10,7 +19,6 @@
     $type = "'".(string)$_POST["type"]."'";
     $target_dir = "../../src/uploads/".$_SESSION['id']."/".$_POST["type"]."/";
     $target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
-
     $content = "'".$_FILES["fileToUpload"]["name"]."'";
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -60,11 +68,9 @@
     }
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-        //echo "Sorry, your file was not uploaded.";
+        echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
     } else {
-
-        include "../../src/query.php";
         $sentFrom = "'".$_SESSION['id']."'";
         $query = new PostData($sentFrom);
         $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole,1);
@@ -86,7 +92,7 @@
     }
   }
 
-
+  //to submit assignment
   if(isset($_POST['submitAssignment']))
   {
     $batch = "'".$_POST["batch"]."'";
@@ -129,8 +135,6 @@
         echo "Sorry, your file was not uploaded.";
     // if everything is ok, try to upload file
     } else {
-
-        include "../../src/query.php";
         $sentFrom = "'".$_SESSION['id']."'";
         $query = new PostData($sentFrom);
         $result = $query->studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole,1);
@@ -140,6 +144,14 @@
           echo 'alert("Successfully Uploaded")';
           echo '</script>';
           if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+
+            $content = "New Assignment :".$_FILES["fileToUpload"]["name"]."";
+            $query_post = new PostData($sentFrom);
+            if($query_post->notification($content,$_POST["batch"],$year)){
+              //echo "success";
+            }else{
+              echo "failure";
+            }
 
           } else {
               echo "Sorry, there was an error uploading your file.";
@@ -151,11 +163,6 @@
         }
     }
 }
-
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -168,63 +175,60 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="../css/style_dashboard.css">
   <script>
-  /* Set the width of the side navigation to 250px */
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-}
+      /* Set the width of the side navigation to 250px */
+      function openNav() {
+          document.getElementById("mySidenav").style.width = "250px";
+      }
+      //to logout and unset session
+      function logout() {
+        session_unset();
+      }
 
-function logout() {
-  session_unset();
-}
-
-/* Set the width of the side navigation to 0 */
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-}
-
-function goToVideos()
-{
-    location.href = "video.php";
-}
-
-function goToImages()
-{
-    location.href = "image.php";
-}
-
-function goToPPT()
-{
-    location.href = "ppt.php";
-}
-
-function goToPDF()
-{
-    location.href = "pdf.php";
-}
-
-
-
-function showStudyMaterial(){
-    var el = document.getElementById('assignment');
-    el.style.display = 'none';
-    document.getElementById('study').removeAttribute("style");
-    closeNav();
-}
-
-function showAssignments(){
-    var el = document.getElementById('study');
-    el.style.display = 'none';
-    document.getElementById('assignment').removeAttribute("style");
-    closeNav();
-}
+      /* Set the width of the side navigation to 0 */
+      function closeNav() {
+          document.getElementById("mySidenav").style.width = "0";
+      }
+      //to go to video page
+      function goToVideos()
+      {
+          location.href = "video.php";
+      }
+      //to go to images page
+      function goToImages()
+      {
+          location.href = "image.php";
+      }
+      //to go to ppt page
+      function goToPPT()
+      {
+          location.href = "ppt.php";
+      }
+      //to go to pdf page
+      function goToPDF()
+      {
+          location.href = "pdf.php";
+      }
 
 
-function downloadPDF(path){
-  location.href = path;
-}
+      //to show study material section
+      function showStudyMaterial(){
+          var el = document.getElementById('assignment');
+          el.style.display = 'none';
+          document.getElementById('study').removeAttribute("style");
+          closeNav();
+      }
+      //to show assignments section
+      function showAssignments(){
+          var el = document.getElementById('study');
+          el.style.display = 'none';
+          document.getElementById('assignment').removeAttribute("style");
+          closeNav();
+      }
 
-
-
+      //function to download pdf
+      function downloadPDF(path){
+        location.href = path;
+      }
   </script>
 
 </head>
@@ -232,27 +236,26 @@ function downloadPDF(path){
 <body>
 
   <nav class="navbar navbar-inverse bg-inverse">
-
       <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
       </span>
-
       <ul class="nav navbar-nav navbar-right">
         <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
         <img class="img-responsive" src='videos.png' width=100% height=100% style='padding:0'></img>
       </ul>
-
    </nav>
 
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
          <div class="menu"  style="text-align:center;">
-            <div class="profile-userpic">
-					        <img src="../../image/images.png" class="img-responsive" alt="">
-                  <a href="#">Puneet Saluja</a>
-				    </div>
-            <hr>
+           <div class="profile-userpic">
+             <img src="../../image/<?php echo $userdata['profile_picture'] ?>" alt="../../image/image.png" class="img-responsive" alt="">
+           </div>
+           <div>
+             <span style="font-size:25px;color:#ffffff;"><?php echo $userdata['username'] ?></span>
+           </div>
+           <hr>
 
             <div>
                <li>
@@ -261,6 +264,10 @@ function downloadPDF(path){
 
                <li>
                  <a href="#"  onclick="showAssignments()">Assignments&nbsp;&nbsp;<span class="fa fa-pencil"></span></a>
+               </li>
+
+               <li>
+                 <a href="discussion_portal.php">Discussion Portal&nbsp;&nbsp;<span class="fa fa-wechat"></span></a>
                </li>
 
                <li>
@@ -283,13 +290,15 @@ function downloadPDF(path){
   </div>
 
 
-  <div id="study" style="display:none;">
+  <div id="study">
     <div class="row">
       <div class="col-md-5">
         <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
 
           <div class="card-block">
-            <!-- Use any element to open the sidenav -->
+            <!-- Section to upload study material -->
+            <h2>Upload Study Material</h2>
+            <hr>
             <form action="" method="post" enctype="multipart/form-data">
               <label for="year">Year:</label>
               <select class="form-control" name="year">
@@ -366,7 +375,7 @@ function downloadPDF(path){
         <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
 
           <div class="card-block">
-            <!-- Use any element to open the sidenav -->
+            <!-- Section to upload assignment -->
             <form action="" method="post" enctype="multipart/form-data">
               <h1>Upload Assignment</h1>
               <hr>
@@ -404,6 +413,7 @@ function downloadPDF(path){
       <div class="col-md-7">
 
         <?php
+            //to get assignments uploaded by teacher
             include_once "../../src/query.php";
             $sentFrom = "'".$_SESSION['id']."'";
             $query = new GetData($sentFrom);
@@ -424,8 +434,6 @@ function downloadPDF(path){
                 foreach ($assignments as $row) {
                   $fileName = basename($row['content'],".pdf");
                   $path = "'"."../../src/uploads/".$row['send_from']."/".$row['type']."/".$row['content']."'";
-                  //file name having spaces have problem
-
                   echo "<TR><TD>".$fileName."</TD><TD>".$row['year']."</TD><TD>".$row['batch']."</TD><TD><button type='button' onclick=downloadPDF(".$path.") class='btn btn-info'>Download</button></TD></TR>";
                 }
                 echo "</table>
@@ -440,8 +448,4 @@ function downloadPDF(path){
 
     </div>
   </div>
-
-
-
-
 </body>
