@@ -1,18 +1,63 @@
 <?php
-    include "../../src/query.php";
-
+include "../../src/query.php";
+session_start();
+$uid = $_SESSION['id'];
+$query_get = new GetData($uid);
+$query_post = new PostData($uid);
 
 if(isset($_POST['updatePassword']))
 {
+
     $password = getCorrectInput($_POST["password"]);
     $salt = sha1(md5($password));
     $password = md5($salt.$password);
-    $fields = array("password"=>$password);
+    $result = $query_post->changePassword($password);
+    if($result)
+    {
+      echo '<script language="javascript">';
+      echo 'alert("Password Successfully changed")';
+      echo '</script>';
+    }
+    else{
+      echo '<script language="javascript">';
+      echo 'alert("Sorry Unable to reset password")';
+      echo '</script>';
+    }
+
+
 }
 
 if(isset($_POST['updateImage']))
 {
-    $image = getCorrectInput($_POST["image"]);
+    $target_dir = "../../image/";
+    $target_file = $target_dir.basename($_FILES["image"]["name"]);
+    $content = $_FILES["image"]["name"];
+    $result = $query_post->changeProfilePic($content);
+    if($result)
+    {
+      if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+        echo '<script language="javascript">';
+        echo 'alert("Profile Picture Uploaded")';
+        echo '</script>';
+      } else {
+          echo "Sorry, there was an error uploading your file.";
+      }
+    }
+    else{
+      echo '<script language="javascript">';
+      echo 'alert("Sorry Unable to change profile picture")';
+      echo '</script>';
+    }
+
+    echo($content);
+}
+
+
+function getCorrectInput($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
 }
  ?>
 
@@ -47,8 +92,8 @@ if(isset($_POST['updateImage']))
         <div style="height: 200px;text-align:center">
             <img src="../../image/logo.png" style="max-height: 100%;max-width: 100%" alt="logo">
         </div>
-        <form class="login" action="" method="post" style="text-align: center;padding:50px 100px">
-            <input class="form-control" name="image" type="file" placeholder="Select Image"  required><br>
+        <form class="login" enctype='multipart/form-data' action="" method="post" style="text-align: center;padding:50px 100px">
+            <input class="form-control" name="image" id='image' type="file" placeholder="Select Image"  required><br>
             <button class="mybutton" style="background-color: 	#FF6347" name="updateImage" type="submit">Update</button>
         </form>
       </div>

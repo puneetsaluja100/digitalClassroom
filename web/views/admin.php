@@ -96,17 +96,16 @@
 
 <body>
 
-  <nav class="navbar navbar-inverse bg-inverse ">
+  <nav class="navbar navbar-inverse bg-inverse">
       <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
       </span>
-      <div class="row">
-        <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
-          <img class="img-responsive" src='videos.png' width=100% height=100% style='padding:0'></img>
-        </ul>
-      </div>
+      <ul class="nav navbar-nav navbar-right pull-right">
+        <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right pull-right">
+        <li class="active">  <a class="btn btn-small btn-primary pull-right" type="button" onclick="openNotify()"><span class="fa fa-bell"></span></a></li>
+      </ul>
    </nav>
 
   <div id="mySidenav" class="sidenav">
