@@ -230,222 +230,226 @@
         location.href = path;
       }
   </script>
-
+  <style>
+    .pull-right{
+      text-align:right;
+    }
+  </style>
 </head>
 
 <body>
 
-  <nav class="navbar navbar-inverse bg-inverse">
-      <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
-      </span>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
-        <img class="img-responsive" src='videos.png' width=100% height=100% style='padding:0'></img>
-      </ul>
-   </nav>
+    <nav class="navbar navbar-inverse bg-inverse" style="width:100%;">
+        <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
+        </span>
+        <ul class="nav navbar-nav navbar-right pull-right">
+          <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
+        </ul>
+     </nav>
+  <div class="container">
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+           <div class="menu"  style="text-align:center;">
+             <div class="profile-userpic">
+               <img src="../../image/<?php echo $userdata['profile_picture'] ?>" alt="../../image/image.png" class="img-responsive" alt="">
+             </div>
+             <div>
+               <span style="font-size:25px;color:#ffffff;"><?php echo $userdata['username'] ?></span>
+             </div>
+             <hr>
 
-  <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-         <div class="menu"  style="text-align:center;">
-           <div class="profile-userpic">
-             <img src="../../image/<?php echo $userdata['profile_picture'] ?>" alt="../../image/image.png" class="img-responsive" alt="">
-           </div>
-           <div>
-             <span style="font-size:25px;color:#ffffff;"><?php echo $userdata['username'] ?></span>
-           </div>
-           <hr>
+              <div>
+                 <li>
+                   <a href="#" onclick="showStudyMaterial()" class="active">Study Material&nbsp;&nbsp;<i class="fa fa-book"></i></a>
+                 </li>
 
-            <div>
-               <li>
-                 <a href="#" onclick="showStudyMaterial()" class="active">Study Material&nbsp;&nbsp;<i class="fa fa-book"></i></a>
-               </li>
+                 <li>
+                   <a href="#"  onclick="showAssignments()">Assignments&nbsp;&nbsp;<span class="fa fa-pencil"></span></a>
+                 </li>
 
-               <li>
-                 <a href="#"  onclick="showAssignments()">Assignments&nbsp;&nbsp;<span class="fa fa-pencil"></span></a>
-               </li>
+                 <li>
+                   <a href="discussion_portal.php">Discussion Portal&nbsp;&nbsp;<span class="fa fa-wechat"></span></a>
+                 </li>
 
-               <li>
-                 <a href="discussion_portal.php">Discussion Portal&nbsp;&nbsp;<span class="fa fa-wechat"></span></a>
-               </li>
+                 <li>
+                   <a href="profile.php">Settings&nbsp;&nbsp;<span class="fa fa-line-chart"></span></a>
+                 </li>
 
-               <li>
-                 <a href="profile.php">Settings&nbsp;&nbsp;<span class="fa fa-line-chart"></span></a>
-               </li>
-
-            </div>
-            <div class="card">
-              <div class="header">
-                <?php
-                echo date("j");
-                ?>
               </div>
+              <div class="card">
+                <div class="header">
+                  <?php
+                  echo date("j");
+                  ?>
+                </div>
 
-              <div class="content">
-                <p><?php echo date("F")." ".date("j").", ".date("Y"); ?></p>
+                <div class="content">
+                  <p><?php echo date("F")." ".date("j").", ".date("Y"); ?></p>
+                </div>
               </div>
+           </div>
+    </div>
+
+
+    <div id="study">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
+
+            <div class="card-block">
+              <!-- Section to upload study material -->
+              <h2>Upload Study Material</h2>
+              <hr>
+              <form action="" method="post" enctype="multipart/form-data">
+                <label for="year">Year:</label>
+                <select class="form-control" name="year">
+                    <option value="1">First</option>
+                    <option value="2">Second</option>
+                    <option value="3">Third</option>
+                    <option value="4">Fourth</option>
+                </select>
+                <br>
+                <label for="branch">Branch:</label>
+                <select class="form-control" name="batch">
+                    <option value="cse">CS</option>
+                    <option value="ece">Mechanical</option>
+                    <option  value="mech">Mechanical</option>
+                    <option  value="meta">Metallurgy</option>
+                </select>
+                <br>
+                <label for="type">Type:</label>
+                <select class="form-control" name="type">
+                    <option value="image">image</option>
+                    <option value="video">video</option>
+                    <option value="ppt">ppt</option>
+                    <option value="pdf">pdf</option>
+                </select>
+                <br>
+                    <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload"></button>
+                <br>
+                <br>
+                <button class="btn btn-primary" name="submitStudyMaterial" type="submit">Submit</button>
+              </form>
             </div>
-         </div>
-  </div>
-
-
-  <div id="study">
-    <div class="row">
-      <div class="col-md-5">
-        <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
-
-          <div class="card-block">
-            <!-- Section to upload study material -->
-            <h2>Upload Study Material</h2>
-            <hr>
-            <form action="" method="post" enctype="multipart/form-data">
-              <label for="year">Year:</label>
-              <select class="form-control" name="year">
-                  <option value="1">First</option>
-                  <option value="2">Second</option>
-                  <option value="3">Third</option>
-                  <option value="4">Fourth</option>
-              </select>
-              <br>
-              <label for="branch">Branch:</label>
-              <select class="form-control" name="batch">
-                  <option value="cse">CS</option>
-                  <option value="ece">Mechanical</option>
-                  <option  value="mech">Mechanical</option>
-                  <option  value="meta">Metallurgy</option>
-              </select>
-              <br>
-              <label for="type">Type:</label>
-              <select class="form-control" name="type">
-                  <option value="image">image</option>
-                  <option value="video">video</option>
-                  <option value="ppt">ppt</option>
-                  <option value="pdf">pdf</option>
-              </select>
-              <br>
-                  <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload"></button>
-              <br>
-              <br>
-              <button class="btn btn-primary" name="submitStudyMaterial" type="submit">Submit</button>
-            </form>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-7"style="text-align:center;">
-        <div>
-            <div class="card" onclick="goToImages()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-              <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/images.png" alt="Card image cap">
-              <div class="card-block">
-                <h4 class="card-title">Images</h4>
-              </div>
-            </div>
-
-            <div class="card" onclick="goToVideos()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-              <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/videos.png" alt="Card image cap">
-              <div class="card-block">
-                <h4 class="card-title">Videos</h4>
-              </div>
-            </div>
+        <div class="col-md-1">
         </div>
+        <div class="col-md-7"style="text-align:center;">
+          <div>
+              <div class="card" onclick="goToImages()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+                <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/images.png" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">Images</h4>
+                </div>
+              </div>
 
-        <div>
-            <div class="card" onclick="goToPDF()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-              <img class="card-img-top" style="height:150px;padding-top:10px" src="../../image/pdf.png" alt="Card image cap">
-              <div class="card-block">
-                <h4 class="card-title">pdf</h4>
+              <div class="card" onclick="goToVideos()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+                <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/videos.png" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">Videos</h4>
+                </div>
               </div>
-            </div>
-            <div class="card" onclick="goToPPT()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
-              <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/ppt.png" alt="Card image cap">
-              <div class="card-block">
-                <h4 class="card-title">ppt</h4>
+          </div>
+
+          <div>
+              <div class="card" onclick="goToPDF()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+                <img class="card-img-top" style="height:150px;padding-top:10px" src="../../image/pdf.png" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">pdf</h4>
+                </div>
               </div>
-            </div>
+              <div class="card" onclick="goToPPT()" style="width: 15rem;height:15rem;display: inline-block;margin:30px;">
+                <img class="card-img-top" style="height:150px;padding-top:10px;" src="../../image/ppt.png" alt="Card image cap">
+                <div class="card-block">
+                  <h4 class="card-title">ppt</h4>
+                </div>
+              </div>
+          </div>
+
         </div>
-
       </div>
     </div>
-  </div>
 
-  <div id="assignment" style="display:none;">
-    <div class="row">
-      <div class="col-md-5">
-        <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
+    <div id="assignment" style="display:none;">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="card" style="width: 30rem;height:35rem;display: inline-block;margin:30px;">
 
-          <div class="card-block">
-            <!-- Section to upload assignment -->
-            <form action="" method="post" enctype="multipart/form-data">
-              <h1>Upload Assignment</h1>
-              <hr>
-              <br>
-              <label for="year">Year:</label>
-              <select class="form-control" name="year">
-                  <option value="1">First</option>
-                  <option value="2">Second</option>
-                  <option value="3">Third</option>
-                  <option value="4">Fourth</option>
-              </select>
-              <br>
-              <label for="branch">Branch:</label>
-              <select class="form-control" name="batch">
-                  <option value="cse">CS</option>
-                  <option value="ece">Mechanical</option>
-                  <option  value="mech">Mechanical</option>
-                  <option  value="meta">Metallurgy</option>
-              </select>
-              <br>
-              <label for="type">Type:</label>
-              <select class="form-control" name="type">
-                  <option value="pdf">pdf/document</option>
-              </select>
-              <br>
-                  <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload"></button>
-              <br>
-              <br>
-              <button class="btn btn-primary" name="submitAssignment" type="submit">Submit</button>
-            </form>
+            <div class="card-block">
+              <!-- Section to upload assignment -->
+              <form action="" method="post" enctype="multipart/form-data">
+                <h1>Upload Assignment</h1>
+                <hr>
+                <br>
+                <label for="year">Year:</label>
+                <select class="form-control" name="year">
+                    <option value="1">First</option>
+                    <option value="2">Second</option>
+                    <option value="3">Third</option>
+                    <option value="4">Fourth</option>
+                </select>
+                <br>
+                <label for="branch">Branch:</label>
+                <select class="form-control" name="batch">
+                    <option value="cse">CS</option>
+                    <option value="ece">Mechanical</option>
+                    <option  value="mech">Mechanical</option>
+                    <option  value="meta">Metallurgy</option>
+                </select>
+                <br>
+                <label for="type">Type:</label>
+                <select class="form-control" name="type">
+                    <option value="pdf">pdf/document</option>
+                </select>
+                <br>
+                    <button class="btn btn-primary"><input type="file" name="fileToUpload" id="fileToUpload"></button>
+                <br>
+                <br>
+                <button class="btn btn-primary" name="submitAssignment" type="submit">Submit</button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-md-7">
+        <div class="col-md-7">
 
-        <?php
-            //to get assignments uploaded by teacher
-            include_once "../../src/query.php";
-            $sentFrom = "'".$_SESSION['id']."'";
-            $query = new GetData($sentFrom);
-            $type = "pdf";
-            $assignment = 'true';
-            $role = "'".$_SESSION['role']."'";
-            $teacher = "te";
-            $student = "st";
-            if($role=="'".$teacher."'")
-            {
-              $assignments = $query->getStudyMaterialMadeByMeById("'".$type."'",$assignment);
-              if($assignments)
+          <?php
+              //to get assignments uploaded by teacher
+              include_once "../../src/query.php";
+              $sentFrom = "'".$_SESSION['id']."'";
+              $query = new GetData($sentFrom);
+              $type = "pdf";
+              $assignment = 'true';
+              $role = "'".$_SESSION['role']."'";
+              $teacher = "te";
+              $student = "st";
+              if($role=="'".$teacher."'")
               {
-                echo "<div>
-                  <br>
-                  <table align='center' class='table table-hover table-striped' style='width:70%;font-size:15px'>
-                  <thead class='thead-inverse'><TR class='danger'><TH style='text-align:center;'>Assignment</TH><TH style='text-align:center;'>Year</TH><TH style='text-align:center;'>Batch</TH><TH style='text-align:center;'>Download</TH></TR></thread>";
-                foreach ($assignments as $row) {
-                  $fileName = basename($row['content'],".pdf");
-                  $path = "'"."../../src/uploads/".$row['send_from']."/".$row['type']."/".$row['content']."'";
-                  echo "<TR><TD>".$fileName."</TD><TD>".$row['year']."</TD><TD>".$row['batch']."</TD><TD><button type='button' onclick=downloadPDF(".$path.") class='btn btn-info'>Download</button></TD></TR>";
+                $assignments = $query->getStudyMaterialMadeByMeById("'".$type."'",$assignment);
+                if($assignments)
+                {
+                  echo "<div>
+                    <br>
+                    <table align='center' class='table table-hover table-striped' style='width:70%;font-size:15px'>
+                    <thead class='thead-inverse'><TR class='danger'><TH style='text-align:center;'>Assignment</TH><TH style='text-align:center;'>Year</TH><TH style='text-align:center;'>Batch</TH><TH style='text-align:center;'>Download</TH></TR></thread>";
+                  foreach ($assignments as $row) {
+                    $fileName = basename($row['content'],".pdf");
+                    $path = "'"."../../src/uploads/".$row['send_from']."/".$row['type']."/".$row['content']."'";
+                    echo "<TR><TD>".$fileName."</TD><TD>".$row['year']."</TD><TD>".$row['batch']."</TD><TD><button type='button' onclick=downloadPDF(".$path.") class='btn btn-info'>Download</button></TD></TR>";
+                  }
+                  echo "</table>
+                  </div>";
                 }
-                echo "</table>
-                </div>";
+                else{
+                  echo "no data available";
+                }
               }
-              else{
-                echo "no data available";
-              }
-            }
-         ?>
-      </div>
+           ?>
+        </div>
 
+      </div>
     </div>
   </div>
 </body>

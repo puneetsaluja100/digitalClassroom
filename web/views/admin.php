@@ -97,16 +97,19 @@
 <body>
 
   <nav class="navbar navbar-inverse bg-inverse">
-      <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
-      </span>
-      <ul class="nav navbar-nav navbar-right pull-right">
-        <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
-      </ul>
 
-      <ul class="nav navbar-nav navbar-right pull-right">
-        <li class="active">  <a class="btn btn-small btn-primary pull-right" type="button" onclick="openNotify()"><span class="fa fa-bell"></span></a></li>
-      </ul>
+      <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px;margin-left:-90%;margin-top:1%;" >&#9776;
+      </span>
+
+      <div>
+
+        <ul class="nav navbar-nav navbar-right pull-right">
+          <li class="active"><a type="button" onclick="logout()" href='index.php' class="label label-primary pull-right" style="margin-left:200%;"></span> Logout<span class="sr-only">(current)</span></a></li>
+        </ul>
+      </div>
+
    </nav>
+
 
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>

@@ -77,7 +77,7 @@ if(isset($_POST['submitLogin']))
 
   if($result)
   {
-    session_start();
+    // session_start();
     $_SESSION['id'] = $result[0]['uid'];
     $_SESSION['role'] = $result[0]['role'];
     $_SESSION['batch'] = $result[0]['batch'];

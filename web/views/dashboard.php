@@ -145,6 +145,11 @@ function downloadPDF(path){
           <li class="active"><a type="button" onclick="logout()" href='index.php' class="label label-primary pull-right"></span> Logout<span class="sr-only">(current)</span></a></li>
         </ul>
       </div>
+      <!-- <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
+        <img class="img-responsive" src='../../image/videos.png' width=100% height=100% style='padding:0'></img>
+      </ul> -->
+
+
 
    </nav>
 
@@ -303,7 +308,7 @@ function downloadPDF(path){
                   <img width='550' src="../../image/NoDataAvailable.png" height='500'>
                   </img>
                 </div>
-              <?php 
+              <?php
             }
           }
        ?>
