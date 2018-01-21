@@ -11,6 +11,8 @@
   $messages = $query_get->getMessages();
   //make an object for PostData class in query.php
   $query_post = new PostData($uid);
+  $userdata = $query_get->getUserDataFromID($uid);
+
 
   //get message and receiver username from the html form send the data to the database
   $toErr = "";
@@ -25,12 +27,11 @@
     if($toErr == ""){
       //if no error insert into the table message by calling the function messages
       if($query_post->messages($content,$to)){
-        $to = $content = "";
-        // if($query_post->notification("You received a message","cse",3)){
-        //   echo "success";
-        // }else{
-        //   echo "failure";
-        // }
+        if($query_post->notification($content,$userdata['batch'],$userdata['year'])){
+          echo "success";
+        }else{
+          echo "failure";
+        }
       }else {
         //the username of the receiver is not valid
         $toErr = "Sorry no ".$to." exists";
