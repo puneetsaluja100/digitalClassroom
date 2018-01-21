@@ -132,23 +132,19 @@ function downloadPDF(path){
 
   <nav class="navbar navbar-inverse bg-inverse">
 
-      <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px" >&#9776;
+      <span class="nav navbar-nav navbar-left" onclick="openNav()" style="font-size:30px;cursor:pointer;color:white;width:100px;margin-left:1%;margin-top:1%;" >&#9776;
       </span>
 
+      <div>
 
+        <ul class="nav navbar-nav navbar-right pull-right" style="margin-left:3%;">
+          <li class="active">  <a class="btn btn-small btn-info pull-right" type="button" onclick="openNotify()"><span class="fa fa-bell"></span></a></li>
+        </ul>
 
-      <ul class="nav navbar-nav navbar-right pull-right">
-        <li class="active"><a onclick="logout()" href='index.php'></span> Logout<span class="sr-only">(current)</span></a></li>
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right pull-right">
-        <li class="active">  <a class="btn btn-small btn-primary pull-right" type="button" onclick="openNotify()"><span class="fa fa-bell"></span></a></li>
-      </ul>
-      <!-- <ul class="nav navbar-nav navbar-right" style="width:50px;height:50px">
-        <img class="img-responsive" src='../../image/videos.png' width=100% height=100% style='padding:0'></img>
-      </ul> -->
-
-
+        <ul class="nav navbar-nav navbar-right pull-right">
+          <li class="active"><a type="button" onclick="logout()" href='index.php' class="label label-primary pull-right"></span> Logout<span class="sr-only">(current)</span></a></li>
+        </ul>
+      </div>
 
    </nav>
 
@@ -302,7 +298,12 @@ function downloadPDF(path){
               </div>";
             }
             else{
-              echo "no data available";
+              ?>
+                <div style="margin-left:4%;">
+                  <img width='550' src="../../image/NoDataAvailable.png" height='500'>
+                  </img>
+                </div>
+              <?php 
             }
           }
        ?>

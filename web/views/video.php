@@ -3,7 +3,7 @@
   include "../../src/query.php";
   $sentFrom = "'".$_SESSION['id']."'";
   $query = new GetData($sentFrom);
-  $type = "video";
+  $type = "vid";
 
   $role = "'".$_SESSION['role']."'";
   $teacher = "te";
@@ -31,9 +31,17 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.css">
     <title></title>
+    <style media="screen">
+      .mainHead{
+        border: 1px solid #5bc0de;
+        background-color: #5bc0de;
+        color:#ffffff;
+        padding:1%;
+      }
+    </style>
   </head>
   <body>
-    <div style="text-align:center;" class="header" id="myHeader">
+    <div style="text-align:center;" class="header mainHead" id="myHeader">
         <h1>Videos</h1>
     </div>
 
@@ -61,9 +69,12 @@
                 </span>";
               }
             }
-            else{
-              echo "no data available";
-            }
+            else{?>
+              <div style="margin-left:32%;">
+                <img width='550' src="../../image/NoDataAvailable.png" height='500'>
+                </img>
+              </div>
+            <?php }
            ?>
         </div>
    </div>

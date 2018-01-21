@@ -1,22 +1,29 @@
 <?php
+  //start the session
   session_start();
+  //include query.php file to get data from the database
   include "../../src/query.php";
+  //put the user id by session variable to $uid
   $uid = $_SESSION['id'];
+  //make an object for GetData class in query.php
   $query_get = new GetData($uid);
+  //get messages from the database
   $messages = $query_get->getMessages();
-  // print_r ($messages);
+  //make an object for PostData class in query.php
   $query_post = new PostData($uid);
 
+  //get message and receiver username from the html form send the data to the database
   $toErr = "";
   $to = $content = "";
   if(isset($_POST['send'])){
     if (empty($_POST["receiver"])) {
-      $toErr = "Receiver's Name is required";
+      $toErr = "* Receiver's Name is required";
     } else {
       $to = $_POST["receiver"];
     }
     $content = $_POST["message"];
     if($toErr == ""){
+      //if no error insert into the table message by calling the function messages
       if($query_post->messages($content,$to)){
         $to = $content = "";
         // if($query_post->notification("You received a message","cse",3)){
@@ -25,7 +32,8 @@
         //   echo "failure";
         // }
       }else {
-        echo "Sorry no ".$to." exists.";
+        //the username of the receiver is not valid
+        $toErr = "Sorry no ".$to." exists";
         $to = "";
       }
     }
@@ -37,6 +45,7 @@
   <head>
     <meta charset="utf-8">
     <title>Discussion Portal</title>
+    <!-- call all the  files required-->
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
@@ -58,9 +67,11 @@
   </head>
   <body>
     <div class="container">
+      <!-- the image  -->
       <div style="margin-bottom:1%;">
         <img src="../../image/Twitter_chat_image1.png" class="" alt="sorry" style="width:100%;height:340px;"/>
       </div>
+      <!-- the form to write the message -->
       <div class="well well-sm">
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
           <div class="form-group">
@@ -77,11 +88,12 @@
               </div>
             </div>
             <div>
-              <span class="error"> <?php echo $toErr;?></span>
+              <span class="error" style="margin-left:75%;color:red;margin-top:5%;"> <?php echo $toErr;?></span>
             </div>
           </div>
         </form>
       </div>
+      <!-- show all the messages for the user and by the user -->
       <div>
         <div class="form">
           <?php while ($row = pg_fetch_row($messages)) {
@@ -103,7 +115,7 @@
                   <label class="form-label" style="font-size:18px;margin-top:1%;margin-left:-2%;"><?php echo $sender['username']?> to <?php echo $receiver['username']?></label>
                 </div>
                 <!-- <div class="col-md-1 col-lg-1 col-sm-12">
-                  <a style="color:#ff0000;" onselect="<?php $query_post->deleteMessage($mid);?>"><i class="fa fa-trash"></i></a>
+                  <a style="color:#ff0000;" onselect="<?php //$query_post->deleteMessage($mid);?>"><i class="fa fa-trash"></i></a>
                 </div> -->
               </div>
               <div class="row" style="margin-left:0.2%;margin-right:0.2%;">

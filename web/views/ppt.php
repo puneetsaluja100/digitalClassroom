@@ -46,11 +46,18 @@
       }
     </script>
     <title></title>
+    <style media="screen">
+      .mainHead{
+        border: 1px solid #5bc0de;
+        background-color: #5bc0de;
+        color:#ffffff;
+        padding:1%;
+      }
+    </style>
   </head>
   <body>
-
-    <div style="text-align:center;" class="header" id="myHeader">
-        <h1>ppt</h1>
+    <div style="text-align:center;" class="header mainHead" id="myHeader">
+        <h1>PPT</h1>
     </div>
 
     <div class="row">
@@ -74,9 +81,12 @@
               echo "</table>
               </div>";
             }
-            else {
-              echo "no data available";
-            }
+            else{?>
+              <div style="margin-left:4%;">
+                <img width='550' src="../../image/NoDataAvailable.png" height='500'>
+                </img>
+              </div>
+            <?php }
            ?>
    </div>
    <div class="col-md-1">

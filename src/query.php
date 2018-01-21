@@ -2,21 +2,25 @@
 
 	include "getConnection.php";
 
+//the class GetData gets the required data from the database by selection
   class GetData{
     var $dbconn;
     var $field;
 
     public function __construct($id)
     {
+			//constructor to connect to postgres and putting the session id of the user in the variable $field
       $this->dbconn = getConnection();
       $this->field = array("uid"=>$id);
     }
 
     public function __destruct()
     {
+			//destructor
       // pg_close($this->dbconn);
     }
 
+		//get any user data from user's id
     public function getUserDataFromID($id)
 		{
 			$field2 = array("uid"=>$id);
@@ -28,6 +32,7 @@
 				return "Sorry, Couldn't get the user data";
 		}
 
+		//get username of any user by id
 		public function getNameById($id)
 		{
 			$field2 = array("uid"=>$id);
@@ -39,6 +44,7 @@
 				return 'Name';
 		}
 
+		//get user id from the username
 		public function getIdByUsername($username)
 		{
 			$field2 = array("username"=>$username);
@@ -50,6 +56,7 @@
 				return $username;
 		}
 
+		//get all the teacher's information who has not been approved yet by admin and show it on admin's page
 		public function getTeacherDetailForApproval()
 		{
 			$query = "select * from users where role = 'te' and approve = 'false';";
@@ -60,21 +67,21 @@
 			}
 		}
 
+		//get study material the user in session made and uploaded by user id
 		public function getStudyMaterialMadeByMeById($type,$assignment)
 		{
-			//$query = "select * from users INNER JOIN (select * from studymaterial where send_from = ".$this->field['uid'].") ON studyMaterial.send_from = users.uid;";
-			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where send_from=".$this->field['uid']." and type=".$type."and assignment=".$assignment.";" ;
+			$query = "select * from studymaterial where send_from=".$this->field['uid']." and type='".$type."' and assignment=".$assignment.";" ;
 			if($result = pg_query($this->dbconn,$query))
 			{
-
 				$result = pg_fetch_all($result);
-				// print_r($result);
 				return $result;
 			}
 			else {
 				return false;
 			}
 		}
+
+		//get study material for the user in session by user id
 		public function getStudyMaterialForMeById()
 		{
 			$query = "select * from studymaterial where send_to = ".$this->field['uid'].";";
@@ -88,6 +95,7 @@
 			}
 		}
 
+		//get all the study material for student for given branch and year
 		public function getStudyMaterialForStudent($batch,$year,$type,$assignment)
 		{
 			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where studyMaterial.approve=true and studyMaterial.batch = ".$batch." and studyMaterial.year =  ".$year." and studyMaterial.type=".$type."and assignment=".$assignment.";";
@@ -101,7 +109,7 @@
 			}
 		}
 
-
+		//get study material for admin to approve
 		public function getStudyMaterialForAdmin()
 		{
 			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where studyMaterial.approve = false and studyMaterial.assignment = false;";
@@ -115,7 +123,7 @@
 			}
 		}
 
-
+		//get subject wise study material made by admin for students
 		public function getSubjectWiseStudyMaterialForStudent($batch,$year)
 		{
 			 $query = "select * from subjectWiseStudyMaterial where batch = '".$batch."' and year = ".$year.";";
@@ -128,6 +136,7 @@
  			 }
 		}
 
+		//get subject wise study material to show it to admin
 		public function getSubjectWiseStudyMaterialForAdmin()
 		{
 			 $query = "select * from subjectWiseStudyMaterial;";
@@ -140,6 +149,7 @@
  			 }
 		}
 
+		//get messages for discussion portal
 		public function getMessages()
 		{
 			//all the messages the user received or send
@@ -153,6 +163,7 @@
 			}
 		}
 
+		//notify the users on the basis if branch and year
 		public function notify($batch,$year)
 		{
 			$query = "select * from notification where batch = '".$batch."' and year = ".$year." order by nid desc limit 5;";
@@ -165,8 +176,48 @@
 			}
 		}
 
+		//get the quiz details on the basis of batch and year
+		public function getQuizDetail($batch,$year)
+		{
+			$query = "select * from quizdetail where batch = ".$batch." and year = ".$batch.";";
+			if($result = pg_query($this->dbconn,$query))
+			{
+				return $result;
+			}
+			else {
+				return false;
+			}
+		}
+
+		//get the quiz questions for a particular topic
+		public function getQuizQuestion($hid)
+		{
+			$query = "select * from quizquestion where hid = ".$hid.";";
+			if($result = pg_query($this->dbconn,$query))
+			{
+				return $result;
+			}
+			else {
+				return false;
+			}
+		}
+
+		//get response the student made for a particular question
+		public function getQuizUserResponse($qid)
+		{
+			$query = "select * from quizuserresponse where qid = ".$qid.";";
+			if($result = pg_query($this->dbconn,$query))
+			{
+				return $result;
+			}
+			else {
+				return false;
+			}
+		}
+
   }
 
+//the class PostData inserts the given data into the database
 	class PostData{
 
 		var $dbconn;
@@ -174,15 +225,18 @@
 
 		public function __construct($id)
 		{
+			//constructor to connect to postgres and putting the session id of the user in the variable $field
 			$this->dbconn = getConnection();
 			$this->field = array("uid"=>$id);
 		}
 
 		public function __destruct()
 		{
+			//destructor
 			// pg_close($this->dbconn);
 		}
 
+		//change the profile picture
 		public function changeProfilePic($userpic)
 		{
 			$data = array("profile_picture"=>$userpic);
@@ -192,6 +246,7 @@
 				return false;
 		}
 
+		//change password
 		public function changePassword($newPassword)
 		{
 			$data = array("password"=>$newPassword);
@@ -205,6 +260,7 @@
 			}
 		}
 
+		//reject teacher by admin so that the teacher cann't login
 		public function rejectTeacher($uid)
 		{
 			//here $uid is the uid of teacher
@@ -213,6 +269,7 @@
 			return $result;
 		}
 
+		//approve teacher and let her login
 		public function approveTeacher($uid)
 		{
 			//here $uid is the uid of teacher
@@ -221,6 +278,7 @@
 			return $result;
 		}
 
+		//approve study material by the admin as before going to students the admin should approve it
 		public function approveStudyMaterial($sid)
 		{
 			$query = "update studyMaterial set approve = true where sid = ".$sid.";";
@@ -228,6 +286,7 @@
 			return $result;
 		}
 
+		//reject study material by admin
 		public function rejectStudyMaterial($sid)
 		{
 			$query = "delete from studyMaterial where sid = ".$sid.";";
@@ -235,6 +294,7 @@
 			return $result;
 		}
 
+		//send the study material information
 		public function studyMaterial($content,$type,$approve,$batch,$year,$assignment,$senderRole,$sendTo)
 		{
 			//$content is the path or the name of the file and it is in string
@@ -252,8 +312,6 @@
 
 			}
 
-
-
 			$query = "insert into studyMaterial (content,send_to,send_from,type,approve,batch,year,assignment) values(".$content.",".$sendTo.",".$this->field['uid'].",".$type.",".$approve.",".$batch.",".$year.",".$assignment.");";
 			if($result = pg_query(getConnection(),$query))
 			{
@@ -264,6 +322,7 @@
 			}
 		}
 
+		//insert into subject wise study material
 		public function subjectWiseStudyMaterial($content,$subject,$topic,$batch,$year)
 		{
 			//$content is an array of text. It should be in the form {"-1.jpg","1.jpg"}
@@ -277,6 +336,7 @@
 			}
 		}
 
+		//insert into the table message
 		public function messages($message,$sendToUsername)
 		{
 			$field2 = array("username"=>$sendToUsername);
@@ -302,6 +362,7 @@
 				return false;
 		}
 
+		//delete the message from the table message
 		public function deleteMessage($mid){
 			$query = "delete from message where mid = ".$mid.";";
 			if($result = pg_query($this->dbconn,$query))
@@ -313,6 +374,7 @@
 			}
 		}
 
+		//insert notification into the table
 		public function notification($message,$batch,$year)
 		{
 				$query = "insert into notification (content,send_from,batch,year) values('".$message."',".$this->field['uid'].",'".$batch."',".$year.");";
@@ -324,24 +386,69 @@
 					return false;
 				}
 		}
+
+	//insert quiz information
+	public function quizDetail($subject,$topic,$batch,$year,$timeDuration)
+	{
+		$query = "insert into quizdetail (subject,topic,batch,year,made_by,timeduration,launch) values('".$subject."','".$topic."','".$batch."',".$year.",".$this->field['uid'].",".$timeDuration.",false);";
+		if($result = pg_query($this->dbconn,$query))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
-/*-- select * from notification where batch = 'ece' and year = 2013 order by nid desc limit 2;
+	//launch the quiz
+	public function launch()
+	{
+		$query = "update quizdetail set launch = true;";
+		if($result = pg_query($this->dbconn,$query))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
--- insert into notification (content,send_from,batch,year) values('assignment not submitted',3,'cse',2013);
+	//insert into quiz question
+	public function quizQuestion($hid,$question,$op1,$op2,$op3,$op4,$correctOption)
+	{
+		$query = "insert into quizquestion (hid,question,option1,option2,option3,option4,correct_option) values(".$hid.",'".$question."','".$op1."','".$op2."','".$op3."','".$op4."','".$correctOption."');";
+		if($result = pg_query($this->dbconn,$query))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	//insert into quiz user response
+	public function quizUserResponse($qid,$hid,$answerOption)
+	{
+		$query = "insert into quizuserresponse (qid,hid,answeroption,uid) values(".$qid.",".$hid.",'".$answerOption."',".$this->field['uid'].");";
+		if($result = pg_query($this->dbconn,$query))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
--- select * from message where send_from = 3 or send_to = 3;
-
--- insert into message (content,send_to,send_from) values('well do not know',5,3);
-
--- select * from subjectWiseStudyMaterial where batch = 'cse' and year = 2015;
-
--- insert into studymaterial (content,send_to,send_from,type,approve,batch,year,assignment) values('-1.jpg',4,3,'img',true,ece,2013,false);
-
--- select * from users INNER JOIN (select * from studymaterial where send_from = ".$this->field['uid'].";) ON studyMaterial.send_to = users.uid
-
--- insert into users (username,email,password,college_id,role,batch,year,approve,profile_picture)
-
--- insert into subjectwisestudymaterial (content,subject,topic,batch,year) values('{"-1.jpg","1.jpg"}','physics','thermodynamics','cse',2015);*/
-
+	//update the student's answer
+	public function updateUserQuizResponse($aid,$answerOption)
+	{
+		$query = "update quizuserresponse set answeroption = ".$answerOption." where aid = ".$aid.";";
+		if($result = pg_query($this->dbconn,$query))
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+}
 ?>
