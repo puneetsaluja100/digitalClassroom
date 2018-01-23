@@ -82,7 +82,7 @@
               </div>";
             }
             else{?>
-              <div style="margin-left:4%;">
+              <div style="text-align:center;">
                 <img width='550' src="../../image/NoDataAvailable.png" height='500'>
                 </img>
               </div>

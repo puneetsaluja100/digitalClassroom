@@ -74,7 +74,7 @@ function getotp()
       $cookie_name = "otp";
       setcookie($cookie_name, $otp, time() + (60 * 3), "/");
       $text = "Your OTP is:" + $otp;
-      $headers = "From: tanmaysonkusle@gmail.com";
+      $headers = "From: puneetsaluja100@gmail.com";
       mail($to,$subject,$text,$headers);
       ?>
       <script>

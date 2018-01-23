@@ -70,10 +70,13 @@
 		//get study material the user in session made and uploaded by user id
 		public function getStudyMaterialMadeByMeById($type,$assignment)
 		{
-			$query = "select * from studymaterial where send_from=".$this->field['uid']." and type='".$type."' and assignment=".$assignment.";" ;
+			$query = "select * from users INNER JOIN studymaterial ON studyMaterial.send_from = users.uid where send_from=".$this->field['uid']." and type=".$type." and assignment=".$assignment.";" ;
+			//print_r($query);
 			if($result = pg_query($this->dbconn,$query))
 			{
+
 				$result = pg_fetch_all($result);
+				// print_r($result);
 				return $result;
 			}
 			else {
@@ -344,7 +347,6 @@
 			{
 				if($result != []){
 					$send_to = $result[0]['uid'];
-					print_r($send_to);
 					$query = "insert into message (content,send_to,send_from) values('".$message."',".$send_to.",".$this->field['uid'].");";
 					if($result1 = pg_query($this->dbconn,$query))
 					{

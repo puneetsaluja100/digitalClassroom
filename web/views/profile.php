@@ -48,8 +48,6 @@ if(isset($_POST['updateImage']))
       echo 'alert("Sorry Unable to change profile picture")';
       echo '</script>';
     }
-
-    echo($content);
 }
 
 

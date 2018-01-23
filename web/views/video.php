@@ -3,7 +3,7 @@
   include "../../src/query.php";
   $sentFrom = "'".$_SESSION['id']."'";
   $query = new GetData($sentFrom);
-  $type = "vid";
+  $type = "video";
 
   $role = "'".$_SESSION['role']."'";
   $teacher = "te";
@@ -45,7 +45,7 @@
         <h1>Videos</h1>
     </div>
 
-    <div class="row">
+    <div class="row" style="margin-top:1%;">
     <div class="col-md-1">
 
     </div>
@@ -70,7 +70,7 @@
               }
             }
             else{?>
-              <div style="margin-left:32%;">
+              <div style="text-align:center;margin-left:30%;">
                 <img width='550' src="../../image/NoDataAvailable.png" height='500'>
                 </img>
               </div>

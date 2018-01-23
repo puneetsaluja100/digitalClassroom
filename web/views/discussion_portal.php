@@ -28,7 +28,7 @@
       //if no error insert into the table message by calling the function messages
       if($query_post->messages($content,$to)){
         if($query_post->notification($content,$userdata['batch'],$userdata['year'])){
-          echo "success";
+          
         }else{
           echo "failure";
         }
